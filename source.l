@@ -1,7 +1,7 @@
 %{
 #include "main.h"
-char s[3];
-int i, j;
+//char s[3];
+//int i, j;
 %}
 
 OCTET	[0-9]{1,3}
@@ -12,9 +12,10 @@ SPACE	[' '\t]
 DOT	\.
 
 %%
-^{CLASSIP}\n {
+ /*^{CLASSIP}\n {
 	for (i=0; i<13; i+=4){
 		for (j=0; j<3; j++) s[j] = yytext[i+j];
+		s[3] = '\n';
 		if (atoi(s) >255) printf("ERROR\n");
 		switch (i % 4){
 			case 0: adrs.A = atoi(s);
@@ -27,12 +28,22 @@ DOT	\.
 				break;
 		}
 	}
-	printf ("class ip: %s\n", yytext);
-	yylval.ch = yytext;
+	printf ("class ip: %d\n", atoi(s));
+	yylval.ch = *yytext;
+	return IP;
+ }*/
+
+{OCTET} {
+	yylval = atoi (yytext);
+	if (yylval > 255) printf ("ERROR!!!!\n");
 	return IP;
 }
 
 ^{BINIP}$ ECHO;
+
+'\n' {
+	return '\n';
+}
 
 .|\n
 %%

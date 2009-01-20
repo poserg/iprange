@@ -2,21 +2,13 @@
 #include "main.h"
 extern FILE *stderr;
 %}
-%defines;
+%defines
 %start input
-%token <ch> IP
-%token <val> OCTET
-%union {
-	int A;
-	int B;
-	int C;
-	int D;
-	char ch;
-}
+%token IP
 %%
 input	: /*	*/
 	| input '\n'
-	| input IP '\n'
+	| input ad '\n'
 	{ 
 		//printf ("не пустая строка: %s \n", $2); 
 		/*adrs.A = yylval.A;
@@ -25,7 +17,12 @@ input	: /*	*/
 		adrs.D = yylval.D;*/
 		//yywrap();
 		//printf("%d\n", adrs.D);
-		printf("%s\n", $2);
+		//printf("%s\n", $2);
+	}
+
+ad	: IP'.'IP'.'IP'.'IP'\n'
+	{ printf ("printing 3: %d\n", $1); 
+	$$ = $3;
 	}
 %%
 extern int yyerror (const char *s)
