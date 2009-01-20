@@ -9,4 +9,10 @@ extern int yylex(void);
 extern int yyparse(void);
 extern int yyerror(const char *);
 
+typedef struct _IPAddress {
+	int A, B, C, D;
+} IPAddress;
+
+extern IPAddress adrs;
+
 #endif

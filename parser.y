@@ -12,12 +12,21 @@ extern FILE *stderr;
 	int C;
 	int D;
 	char ch;
-	int val;
 }
 %%
 input	: /*	*/
-	| input IP
-	{ printf ("не пустая строка: %s \n", $2); }
+	| input '\n'
+	| input IP '\n'
+	{ 
+		//printf ("не пустая строка: %s \n", $2); 
+		/*adrs.A = yylval.A;
+		adrs.B = yylval.B;
+		adrs.C = yylval.C;
+		adrs.D = yylval.D;*/
+		//yywrap();
+		//printf("%d\n", adrs.D);
+		printf("%s\n", $2);
+	}
 %%
 extern int yyerror (const char *s)
 {

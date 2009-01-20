@@ -16,9 +16,19 @@ DOT	\.
 	for (i=0; i<13; i+=4){
 		for (j=0; j<3; j++) s[j] = yytext[i+j];
 		if (atoi(s) >255) printf("ERROR\n");
+		switch (i % 4){
+			case 0: adrs.A = atoi(s);
+				break;
+			case 1: adrs.B = atoi(s);
+				break;
+			case 2: adrs.C = atoi(s);
+				break;
+			case 3: adrs.D = atoi(s);
+				break;
+		}
 	}
-	//printf ("class ip\n");
-	yylval.ch = *yytext;
+	printf ("class ip: %s\n", yytext);
+	yylval.ch = yytext;
 	return IP;
 }
 

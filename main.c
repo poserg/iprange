@@ -1,12 +1,8 @@
-#include <stdio.h>
-struct IPAddress {
-	int A, B, C, D;
-};
-
+#include "main.h"
+IPAddress adrs;
 int main()
 {
-	IPAddress adrs;
-	adrs.A = 10;
+	yyparse();
 	printf ("%d\n", adrs.A);
 	return 0;
 }
