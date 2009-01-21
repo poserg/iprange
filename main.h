@@ -9,6 +9,8 @@ extern int yylex(void);
 extern int yyparse(void);
 extern int yyerror(const char *);
 
+extern int flag;
+
 typedef struct _IPAddress {
 	int A;
 	int B;

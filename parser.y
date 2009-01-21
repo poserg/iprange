@@ -1,19 +1,30 @@
 %{
 #include "main.h"
+#define YYERROR_VERBOSE
 extern FILE *stderr;
+int flag = 0;
 %}
 %defines
 %start input
-%token IP QUIT
+%token IP QUIT SPACE
 %%
 input	: /*	*/
 	| input '\n'
-	| input ad '\n'
+	| input state 
 	{ 
-		printf ("add address: %d\n", $2);	
+		printf ("add address: %d\n", $2);
 	}
 	| input QUIT
-	{ YYACCEPT; }
+	{ 
+		//flag = 1;
+		YYACCEPT; 
+		//yywrap();
+	}
+	;
+
+state 	: ad 
+	| ad SPACE '-' SPACE ad
+	| ad SPACE ':' SPACE ad
 	;
 
 ad	: IP'.'IP'.'IP'.'IP
@@ -22,7 +33,7 @@ ad	: IP'.'IP'.'IP'.'IP
 		adrs.A = $1;
 		adrs.B = $3;
 		adrs.C = $5;
-		adrs.D = $7;	
+		adrs.D = $7;
 		$$ = 123;
 	}
 	;

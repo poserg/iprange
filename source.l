@@ -1,7 +1,7 @@
 %{
 #include "main.h"
 char ch[3];
-int i;
+int i, j;
 %}
 
 OCTET	[0-9]{1,3}
@@ -21,9 +21,14 @@ QUIT	^{SPACE}*[Qq][Uu][Ii][Tt]$
 	printf ("++%d\n", atoi (ch));
 	return IP;
 }
+
+{SPACE}+ {
+	return SPACE;
+}
+
 ^{BINIP}$ ECHO;
 
-'\n' {
+\n {
 	return '\n';
 }
 
@@ -31,8 +36,21 @@ QUIT	^{SPACE}*[Qq][Uu][Ii][Tt]$
 	return '.';
 }
 
+- {
+	return '-';
+}
+
+\: {
+	ECHO;
+	return ':';
+}
+
 {QUIT} {
 	return QUIT;
+}
+
+{DOT}+ {
+	yyerror ("More dot");
 }
 
 .|\n
