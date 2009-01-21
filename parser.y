@@ -2,7 +2,7 @@
 #include "main.h"
 #define YYERROR_VERBOSE
 extern FILE *stderr;
-int flag = 0;
+//int flag = 0;
 %}
 %defines
 %start input
@@ -12,7 +12,7 @@ input	: /*	*/
 	| input '\n'
 	| input state 
 	{ 
-		printf ("add address: %d\n", $2);
+		//printf ("add address: %d\n", $2);
 	}
 	| input QUIT
 	{ 
@@ -23,8 +23,11 @@ input	: /*	*/
 	;
 
 state 	: ad 
+	{ printf ("simple IP\n");}
 	| ad SPACE '-' SPACE ad
+	{ printf ("range IP - '-'\n");}
 	| ad SPACE ':' SPACE ad
+	{ printf ("range IP - ':'\n");}
 	;
 
 ad	: IP'.'IP'.'IP'.'IP
@@ -34,7 +37,6 @@ ad	: IP'.'IP'.'IP'.'IP
 		adrs.B = $3;
 		adrs.C = $5;
 		adrs.D = $7;
-		$$ = 123;
 	}
 	;
 %%

@@ -12,10 +12,10 @@ extern int yyerror(const char *);
 extern int flag;
 
 typedef struct _IPAddress {
-	int A;
-	int B;
-	int C;
-	int D;
+	char A;
+	char B;
+	char C;
+	char D;
 } IPAddress;
 
 extern IPAddress adrs;

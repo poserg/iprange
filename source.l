@@ -2,8 +2,9 @@
 #include "main.h"
 char ch[3];
 int i, j;
+int flag;
 %}
-
+ //%option noyywrap
 OCTET	[0-9]{1,3}
 BIN	[01]{8,8}
 CLASSIP	{SPACE}*({OCTET}{DOT}){3,3}{OCTET}{SPACE}*
@@ -11,6 +12,7 @@ BINIP	{SPACE}*({BIN}{DOT}){3,3}{BIN}{SPACE}*
 SPACE	[' '\t]
 DOT	\.
 QUIT	^{SPACE}*[Qq][Uu][Ii][Tt]$
+RESERV	[-\n\:\.]
 
 %%
 {OCTET} {
@@ -18,7 +20,7 @@ QUIT	^{SPACE}*[Qq][Uu][Ii][Tt]$
 	if (yylval > 255) yyerror ("ERROR!!!!");
 	ch[0]=ch[1]=ch[2]=' ';
 	for (i=0; i<yyleng; i++) ch[i] = yytext[i];
-	printf ("++%d\n", atoi (ch));
+	//printf ("++%d\n", atoi (ch)); //debug
 	return IP;
 }
 
@@ -28,21 +30,8 @@ QUIT	^{SPACE}*[Qq][Uu][Ii][Tt]$
 
 ^{BINIP}$ ECHO;
 
-\n {
-	return '\n';
-}
-
-\. {
-	return '.';
-}
-
-- {
-	return '-';
-}
-
-\: {
-	ECHO;
-	return ':';
+{RESERV} {
+	return yytext[0];
 }
 
 {QUIT} {
@@ -57,5 +46,9 @@ QUIT	^{SPACE}*[Qq][Uu][Ii][Tt]$
 %%
 int yywrap ()
 {
-	return 1;
+	if (flag) return flag;
+	if (!flag) {
+		flag = 1;
+		return 0;
+	}
 }
