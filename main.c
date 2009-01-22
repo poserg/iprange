@@ -2,7 +2,7 @@
 #include <list>
 using namespace std;
 IPAddress adrs;
-string adr;
+char adr[15];
 void Out (string& s)
 {
 	cout << s << '\n';

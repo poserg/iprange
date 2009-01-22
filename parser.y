@@ -32,8 +32,8 @@ state 	: ad
 
 ad	: IP'.'IP'.'IP'.'IP
 	{ 
-		printf ("printing 3: %d\n", $3); 
-		//adr = $1+'.'+$3+'.'+$5+'.'+$6;
+		//printf ("printing 3: %d\n", $3); 
+		adr =( $1,'.',$3,'.',$5,'.',$6;);
 	}
 	;
 %%

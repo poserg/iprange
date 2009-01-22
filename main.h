@@ -24,7 +24,7 @@ typedef struct _IPAddress {
 } IPAddress;
 
 extern IPAddress adrs;
-extern string adr;
+extern char adr[15];
 
 //extern void AddAddress (
 #endif
