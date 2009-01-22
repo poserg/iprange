@@ -3,13 +3,18 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <iostream>
 #include "y.tab.h"
+#include <string>
+
+using namespace std;
 
 extern int yylex(void);
 extern int yyparse(void);
 extern int yyerror(const char *);
 
 extern int flag;
+extern char ch[3];
 
 typedef struct _IPAddress {
 	char A;
@@ -19,5 +24,7 @@ typedef struct _IPAddress {
 } IPAddress;
 
 extern IPAddress adrs;
+extern string adr;
 
+//extern void AddAddress (
 #endif

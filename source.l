@@ -4,7 +4,6 @@ char ch[3];
 int i, j;
 int flag;
 %}
- //%option noyywrap
 OCTET	[0-9]{1,3}
 BIN	[01]{8,8}
 CLASSIP	{SPACE}*({OCTET}{DOT}){3,3}{OCTET}{SPACE}*
@@ -18,7 +17,7 @@ RESERV	[-\n\:\.]
 {OCTET} {
 	yylval = atoi (yytext);
 	if (yylval > 255) yyerror ("ERROR!!!!");
-	ch[0]=ch[1]=ch[2]=' ';
+	//ch[0]=ch[1]=ch[2]=' ';
 	for (i=0; i<yyleng; i++) ch[i] = yytext[i];
 	//printf ("++%d\n", atoi (ch)); //debug
 	return IP;

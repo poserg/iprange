@@ -22,7 +22,7 @@ input	: /*	*/
 	}
 	;
 
-state 	: ad 
+state 	: ad
 	{ printf ("simple IP\n");}
 	| ad SPACE '-' SPACE ad
 	{ printf ("range IP - '-'\n");}
@@ -33,10 +33,7 @@ state 	: ad
 ad	: IP'.'IP'.'IP'.'IP
 	{ 
 		printf ("printing 3: %d\n", $3); 
-		adrs.A = $1;
-		adrs.B = $3;
-		adrs.C = $5;
-		adrs.D = $7;
+		//adr = $1+'.'+$3+'.'+$5+'.'+$6;
 	}
 	;
 %%
