@@ -30,14 +30,16 @@ input	: /*	*/
 	;
 
 state 	: ad
-	{
-		for (i=0; i<4; i++) 
-			if ($1[i]>0) printf ("%d.", $1[i]);
-			else printf ("%d.", 256+$1[i]);
-		printf ("%c", '\n');
-	}
+	{ AddAddress ($1);}
 	| ad SPACE '-' SPACE ad
-	{ printf ("range IP - '-'\n");}
+	{ 
+		if ($1[0]<$5[0]) yyerror ("1 < 2");
+		else {
+			for (i=0; i<$1[3]-$5[3]; i++)
+				$1[3]++;
+				AddAddress ($1);
+		}
+	}
 	| ad SPACE ':' SPACE ad
 	{ printf ("range IP - ':'\n");}
 	;

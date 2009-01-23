@@ -1,25 +1,19 @@
 #include "main.h"
 #include <list>
-using namespace std;
-//IPAddress adrs;
-char str[15];
-void Out (string& s)
+char str[4];
+list<string> slist;
+void Out (string s)
 {
-	cout << s << '\n';
+	int i;
+	for (i=0; i<4; i++){
+		printf ("%d.", (int)s[i]);
+	}
+	printf ("%c", '\n');
 }
 
-void ListOut (list<string>& slist)
+void AddAddress (char adrs[])
 {
-	list<string>::iterator iter = slist.begin();
-	for ( ; iter != slist.end(); ++iter)
-		cout << *iter << '\n';
-	
-}
-
-void AddAddress (list<string>& list, IPAddress& adrs)
-{
-	string temp;// = ch[1]+ch[2]+ch[3]+'\0';
-	list.push_back (temp);
+	slist.push_back(adrs);
 }
 
 int main(void)
@@ -27,28 +21,14 @@ int main(void)
 	int flag;
 	int i;
 	string str;
-	list<string> slist;
 	list<string>::iterator iter; 
-/*	slist.push_back( "Hello");
-	slist.push_back( "World");
-	iter = slist.begin();
-	for ( ; iter != slist.end(); ++iter)
-		cout << *iter << '\n';
-	str = *slist.begin();
-	iter = slist.begin();
-	Out (*iter);*/
-	//Out (str);
-	//Out (slist.begin());
-	//flag = (argc>1)?0:1;
-	//printf ("%d - argc\n", argc);
 	yyparse();
-	//argv=NULL;
-	//printf ("%d\n", adrs.A);
-	//yyparse(); //?
-	//AddAddress (slist, adrs);
-	//ListOut (slist);
-	for (i=0; str[i]; i++) cout << str[i];
-	cout << '\n';
-	printf("%c\n", str[2]);
+	slist.push_back (str);
+	iter = slist.begin();
+	//cout << *iter << " | in main\n";
+	for (i=0; i<5; i++) {
+		Out (*iter);
+		iter++;
+	}
 	return 0;
 }

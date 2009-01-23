@@ -6,7 +6,6 @@
 #include <iostream>
 #include "y.tab.h"
 #include <string>
-#include <vector>
 
 using namespace std;
 
@@ -25,7 +24,8 @@ typedef struct _IPAddress {
 } IPAddress;
 
 extern IPAddress adrs;
-extern char str[15];
+extern char str[4];
+extern void AddAddress ( char adrs[] );
 //extern list<string> 
 
 //extern void AddAddress (
