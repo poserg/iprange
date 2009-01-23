@@ -16,8 +16,8 @@ RESERV	[-\n\:\.]
 {OCTET} {
 	yylval.ival = atoi (yytext);
 	if (yylval.ival > 255) yyerror ("ERROR!!!!");
-	yylval.ch[0]=yylval.ch[1]=yylval.ch[2]=0;
-	for (j=0; j<yyleng; j++) yylval.ch[j] = yytext[j];
+	//yylval.ch[0]=yylval.ch[1]=yylval.ch[2]=0;
+	//for (j=0; j<yyleng; j++) yylval.ch[j] = yytext[j];
 	//printf ("++%d\n", atoi (ch)); //debug
 	return IP;
 }

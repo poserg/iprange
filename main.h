@@ -15,7 +15,7 @@ extern int yyparse(void);
 extern int yyerror(const char *);
 
 extern int flag;
-extern char ch[3];
+extern char ch[4];
 
 typedef struct _IPAddress {
 	char A;

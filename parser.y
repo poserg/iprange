@@ -7,13 +7,12 @@ int i, k;
 %}
 %defines
 %start input
-%token <ch> IP 
+%token <ival> IP 
 %token <ival> QUIT SPACE
-%type <adr> ad
+%type <ch> ad
 %union {
-	char ch[3];
+	char ch[4];
 	int ival;
-	char adr[15];
 }
 %%
 input	: /*	*/
@@ -31,10 +30,11 @@ input	: /*	*/
 	;
 
 state 	: ad
-	{ 
-		for (i=0; i<15; i++) str[i] = 0;
-		for (i=0; i<k; i++) str[i] = $1[i];
-		printf ("%c\n", str[2]);
+	{
+		for (i=0; i<4; i++) 
+			if ($1[i]>0) printf ("%d.", $1[i]);
+			else printf ("%d.", 256+$1[i]);
+		printf ("%c", '\n');
 	}
 	| ad SPACE '-' SPACE ad
 	{ printf ("range IP - '-'\n");}
@@ -44,16 +44,10 @@ state 	: ad
 
 ad	: IP'.'IP'.'IP'.'IP
 	{ 
-		for (i=0; i<15; i++) $$[i]=0;
-		k = 0;
-		for (i=0; $1[i]; i++) $$[k++] = $1[i];
-		$$[k++] = '.';
-		for (i=0; $3[i]; i++) $$[k++] = $3[i];
-		$$[k++] = '.';
-		for (i=0; $5[i]; i++) $$[k++] = $5[i];	
-		$$[k++] = '.';
-		for (i=0; $7[i]; i++) $$[k++] = $7[i];
-
+		$$[0] = $1;
+		$$[1] = $3;
+		$$[2] = $5;
+		$$[3] = $7;
 	}
 	;
 %%
