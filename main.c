@@ -1,14 +1,12 @@
 #include "main.h"
 #include <list>
 using namespace std;
-IPAddress adrs;
-char adr[15];
+//IPAddress adrs;
+char str[15];
 void Out (string& s)
 {
 	cout << s << '\n';
 }
-
-
 
 void ListOut (list<string>& slist)
 {
@@ -27,17 +25,18 @@ void AddAddress (list<string>& list, IPAddress& adrs)
 int main(void)
 {
 	int flag;
+	int i;
 	string str;
 	list<string> slist;
 	list<string>::iterator iter; 
-	slist.push_back( "Hello");
+/*	slist.push_back( "Hello");
 	slist.push_back( "World");
 	iter = slist.begin();
 	for ( ; iter != slist.end(); ++iter)
 		cout << *iter << '\n';
 	str = *slist.begin();
 	iter = slist.begin();
-	Out (*iter);
+	Out (*iter);*/
 	//Out (str);
 	//Out (slist.begin());
 	//flag = (argc>1)?0:1;
@@ -46,7 +45,10 @@ int main(void)
 	//argv=NULL;
 	//printf ("%d\n", adrs.A);
 	//yyparse(); //?
-	AddAddress (slist, adrs);
-	ListOut (slist);
+	//AddAddress (slist, adrs);
+	//ListOut (slist);
+	for (i=0; str[i]; i++) cout << str[i];
+	cout << '\n';
+	printf("%c\n", str[2]);
 	return 0;
 }

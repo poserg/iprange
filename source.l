@@ -1,7 +1,6 @@
 %{
 #include "main.h"
-char ch[3];
-int i, j;
+int j;
 int flag;
 %}
 OCTET	[0-9]{1,3}
@@ -15,10 +14,10 @@ RESERV	[-\n\:\.]
 
 %%
 {OCTET} {
-	yylval = atoi (yytext);
-	if (yylval > 255) yyerror ("ERROR!!!!");
-	//ch[0]=ch[1]=ch[2]=' ';
-	for (i=0; i<yyleng; i++) ch[i] = yytext[i];
+	yylval.ival = atoi (yytext);
+	if (yylval.ival > 255) yyerror ("ERROR!!!!");
+	yylval.ch[0]=yylval.ch[1]=yylval.ch[2]=0;
+	for (j=0; j<yyleng; j++) yylval.ch[j] = yytext[j];
 	//printf ("++%d\n", atoi (ch)); //debug
 	return IP;
 }
