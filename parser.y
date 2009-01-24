@@ -3,6 +3,8 @@
 #define YYERROR_VERBOSE
 extern FILE *stderr;
 int i, k;
+unsigned s1, s2, s3, s4, s;
+char p[4];
 //int flag = 0;
 %}
 %defines
@@ -32,13 +34,11 @@ input	: /*	*/
 state 	: ad
 	{ AddAddress ($1);}
 	| ad SPACE '-' SPACE ad
-	{ 
-		if ($1[0]<$5[0]) yyerror ("1 < 2");
-		else {
-			for (i=0; i<$1[3]-$5[3]; i++)
-				$1[3]++;
-				AddAddress ($1);
-		}
+	{
+		s1 = func ($1);
+		s2 = func ($5);
+		//printf ("s1 = %u; s2 = %u\n", s1, s2);
+		unfunc (s1, *p);		
 	}
 	| ad SPACE ':' SPACE ad
 	{ printf ("range IP - ':'\n");}
@@ -58,3 +58,4 @@ extern int yyerror (const char *s)
 	fprintf (stderr, "ERROR: %s\n", s);
 	return 0;
 }
+
