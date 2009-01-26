@@ -1,6 +1,5 @@
 #include "main.h"
 #include <list>
-unsigned it;
 list<unsigned> slist;
 
 unsigned pow (int x, int k){
@@ -51,5 +50,6 @@ int find (unsigned& item)
 int main(void)
 {
 	yyparse();
+	if (fileno(stdin) != 0) 
 	return 0;
 }

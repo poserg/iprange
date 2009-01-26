@@ -2,14 +2,18 @@
 #include "main.h"
 //#define YYERROR_VERBOSE
 extern FILE *stderr;
-int i, k;
+int i, j, k, m;
+char ch1 [4];
+char ch2 [4];
+int arr1 [32];
+int arr2 [32];
 unsigned s1, s2, s;
 int p [4];
 %}
 %defines
 %start input
 %token <ival> IP 
-%token <ival> QUIT SPACE
+%token <ival> QUIT SPACE DIGIT
 %type <ch> ad
 %union {
 	char ch[4];
@@ -34,23 +38,30 @@ state 	: ad
 	{
 		s1 = func ($1);
 		s2 = func ($3);
-		if (s1<=s2){
-			for ( ; s1<=s2; s1++){
-				if (!find(s1))
-					AddAddress (s1);
-				else {
-					printf ("IP is exist: ");
-					unfunc (s1, p);
-					for (i=0; i<4; i++){
-						k = p[i];
-						printf ("%d.", k);
-					}
-					printf ("\n");
-				}
-			}
-			printf ("Add\n");
-		} else printf ("Not add\n");
 		
+	}
+	| ad'/'IP 
+	{
+		for (i=0; i<4; i++) ch1[i] = ch2[i] = ($1[i]>=0)?$1[i]:(256+$1[i]);
+		
+		decToBin (ch1, arr1);
+		
+		k = $3;
+		for (i=31; i>=0; i--){
+			if (k-- > 0) {
+				arr2[i] = arr1[i];
+			} else {
+				arr1[i] = 0;
+				arr2[i] = 1;
+			}
+		}
+		binToDec (arr1, ch1);
+		binToDec (arr2, ch2);
+		
+		s1 = func (ch1);
+		s2 = func (ch2);
+		
+		Sorted (s1,s2);
 	}
 	;
 
@@ -63,9 +74,56 @@ ad	: IP'.'IP'.'IP'.'IP
 	}
 	;
 %%
-extern int yyerror (const char *s)
+int yyerror (const char *s)
 {
 	fprintf (stderr, "ERROR: %s\n", s);
 	return 0;
 }
 
+void decToBin (char *ch, int *arr)
+{
+	int t, i, j;
+	for (i=0; i<4; i++){
+		k = (ch[3-i]>0)?ch[3-i]:(256+ch[3-i]);
+		for (j=0; j<8; j++){
+			t = k / 2;
+			*arr = k-2*t;
+			arr++;
+			k = t;
+		}
+	}
+	
+}
+
+void binToDec (int *arr, char *ch)
+{
+	int p, i, j;
+	for (i=0; i<4; i++){
+		p = 0;
+		for (j=0; j<8; j++){
+			p+=*arr*pow(2, j);
+			arr++;
+		}
+		ch[3-i] = (p<128)?p:(p-255);
+	}
+}
+
+void Sorted (unsigned& s1, unsigned& s2)
+{	
+	if (s1<=s2){
+		for ( ; s1<=s2; s1++){
+			if (!find(s1))
+				AddAddress (s1);
+			else {
+				printf ("IP is exist: ");
+				unfunc (s1, p);
+				for (i=0; i<4; i++){
+					k = p[i];
+					printf ("%d.", k);
+				}
+				printf ("\n");
+			}
+		}
+		printf ("Add\n");
+	} else yyerror ("s1>s2!");
+}

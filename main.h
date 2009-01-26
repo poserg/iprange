@@ -3,15 +3,16 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <iostream>
 #include "y.tab.h"
-#include <string>
 
 using namespace std;
 
 extern int yylex(void);
 extern int yyparse(void);
 extern int yyerror(const char *);
+extern void decToBin (char*, int*);
+extern void binToDec (int*, char*);
+extern void Sorted (unsigned&, unsigned&);
 
 extern int flag;
 
@@ -22,8 +23,6 @@ typedef struct _IPAddress {
 	char D;
 } IPAddress;
 
-extern IPAddress adrs;
-extern char str[4];
 extern void AddAddress ( unsigned& item);
 extern unsigned func (char *ch);
 extern void unfunc (unsigned s, int* ch);
