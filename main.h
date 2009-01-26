@@ -25,7 +25,7 @@ typedef struct _IPAddress {
 
 extern IPAddress adrs;
 extern char str[4];
-extern void AddAddress ( char adrs[] );
+extern void AddAddress ( unsigned& item);
 extern unsigned func (char *ch);
 extern void unfunc (unsigned s, char& ch);
 extern unsigned pow (int x, int k);

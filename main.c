@@ -1,7 +1,7 @@
 #include "main.h"
 #include <list>
-char str[4];
-list<string> slist;
+unsigned it;
+list<unsigned> slist;
 
 unsigned pow (int x, int k){
 	int i; 
@@ -15,7 +15,7 @@ unsigned func (char *ch){
 	unsigned s;
 	s = 0;
 	for (i=0; i<4; i++){	
-		k = (*ch>0)?(*ch):(256+*ch);
+		k = (*ch>=0)?(*ch):(256+*ch);
 		s += pow(2, 8*(3-i))*k;
 		ch++;
 	}
@@ -29,33 +29,43 @@ void unfunc (unsigned s, char& ch)
 		printf ("%c\n", ch);
 	}
 }
-void Out (string s)
+void Out (unsigned& s)
+{
+		printf ("%u\n", s);
+}
+
+void AddAddress (unsigned& item)
+{
+	slist.push_back(item);
+}
+
+int find (unsigned& item)
 {
 	int i;
-	for (i=0; i<4; i++){
-		printf ("%d.", (int)s[i]);
-	}
-	printf ("%c", '\n');
+	list<unsigned>::iterator iter;
+	iter = slist.begin();
+	while (iter++ != slist.end())
+		if ( *iter == item ) cout << 1 << '\n';
+	cout << 0 << '\n';
+	return 0;
 }
-
-void AddAddress (char adrs[])
-{
-	slist.push_back(adrs);
-}
-
 int main(void)
 {
 	int flag;
 	int i;
 	string str;
-	list<string>::iterator iter; 
+	list<unsigned>::iterator iter; 
 	yyparse();
-	slist.push_back (str);
+	//slist.push_back (str);
 	iter = slist.begin();
 	//cout << *iter << " | in main\n";
 	for (i=0; i<slist.size(); i++) {
 		Out (*iter);
 		iter++;
 	}
+	cout << "i = " << i << '\n';
+	it = 2063729409;
+	//find (it);
+	//cout << find(it) << '\n';
 	return 0;
 }

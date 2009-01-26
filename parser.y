@@ -32,15 +32,18 @@ input	: /*	*/
 	;
 
 state 	: ad
-	{ AddAddress ($1);}
-	| ad SPACE '-' SPACE ad
+	{ //AddAddress ($1);
+	}
+	| ad'-'ad
 	{
 		s1 = func ($1);
-		s2 = func ($5);
-		//printf ("s1 = %u; s2 = %u\n", s1, s2);
-		unfunc (s1, *p);		
+		s2 = func ($3);
+		printf ("s1=%u; s2=%u\n", s1, s2);
+		for ( ; s1<=s2; s1++){
+			AddAddress (s1);
+		}
 	}
-	| ad SPACE ':' SPACE ad
+	| //ad SPACE ':' SPACE ad
 	{ printf ("range IP - ':'\n");}
 	;
 
