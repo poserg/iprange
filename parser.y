@@ -1,11 +1,10 @@
 %{
 #include "main.h"
-#define YYERROR_VERBOSE
+//#define YYERROR_VERBOSE
 extern FILE *stderr;
 int i, k;
-unsigned s1, s2, s3, s4, s;
-char p[4];
-//int flag = 0;
+unsigned s1, s2, s;
+int p [4];
 %}
 %defines
 %start input
@@ -20,31 +19,39 @@ char p[4];
 input	: /*	*/
 	| input '\n'
 	| input state 
-	{ 
-		//printf ("add address: %d\n", $2);
-	}
 	| input QUIT
-	{ 
-		//flag = 1;
-		YYACCEPT; 
-		//yywrap();
-	}
+	{ YYACCEPT; }
+	| input error '\n'
 	;
 
 state 	: ad
-	{ //AddAddress ($1);
+	{ 
+		s = func($1);
+		if (find(s)) printf ("yes\n");
+		else printf ("no\n");
 	}
 	| ad'-'ad
 	{
 		s1 = func ($1);
 		s2 = func ($3);
-		printf ("s1=%u; s2=%u\n", s1, s2);
-		for ( ; s1<=s2; s1++){
-			AddAddress (s1);
-		}
+		if (s1<=s2){
+			for ( ; s1<=s2; s1++){
+				if (!find(s1))
+					AddAddress (s1);
+				else {
+					printf ("IP is exist: ");
+					unfunc (s1, p);
+					for (i=0; i<4; i++){
+						k = p[i];
+						printf ("%d.", k);
+					}
+					printf ("\n");
+				}
+			}
+			printf ("Add\n");
+		} else printf ("Not add\n");
+		
 	}
-	| //ad SPACE ':' SPACE ad
-	{ printf ("range IP - ':'\n");}
 	;
 
 ad	: IP'.'IP'.'IP'.'IP

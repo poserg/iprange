@@ -19,10 +19,6 @@ RESERV	[-\n\:\.]
 	return IP;
 }
 
- /*{SPACE}+ {
-	return SPACE;
- }*/
-
 ^{BINIP}$ ECHO;
 
 {RESERV} {
@@ -37,7 +33,9 @@ RESERV	[-\n\:\.]
 	yyerror ("More dot");
 }
 
-.|\n
+.|\n {
+	yyerror ("Syntax error!");
+}
 %%
 int yywrap ()
 {

@@ -10,6 +10,7 @@ unsigned pow (int x, int k){
 	for (i=0; i<k; i++) s*=x;
 	return s;
 }
+
 unsigned func (char *ch){
 	int i,j,k;
 	unsigned s;
@@ -21,17 +22,15 @@ unsigned func (char *ch){
 	}
 	return s;
 }
-void unfunc (unsigned s, char& ch)
+
+void unfunc (unsigned s, int *ch)
 {
 	int i;
 	for (i=0; i<4; i++){
-		ch = s/pow(2, 8*(3-i));
-		printf ("%c\n", ch);
+		*ch = s/pow(2, 8*(3-i));
+		s=s%pow(2, 8*(3-i));
+		ch++;
 	}
-}
-void Out (unsigned& s)
-{
-		printf ("%u\n", s);
 }
 
 void AddAddress (unsigned& item)
@@ -44,28 +43,13 @@ int find (unsigned& item)
 	int i;
 	list<unsigned>::iterator iter;
 	iter = slist.begin();
-	while (iter++ != slist.end())
-		if ( *iter == item ) cout << 1 << '\n';
-	cout << 0 << '\n';
+	while (iter != slist.end())
+		if ( *iter++ == item ) return 1;
 	return 0;
 }
+
 int main(void)
 {
-	int flag;
-	int i;
-	string str;
-	list<unsigned>::iterator iter; 
 	yyparse();
-	//slist.push_back (str);
-	iter = slist.begin();
-	//cout << *iter << " | in main\n";
-	for (i=0; i<slist.size(); i++) {
-		Out (*iter);
-		iter++;
-	}
-	cout << "i = " << i << '\n';
-	it = 2063729409;
-	//find (it);
-	//cout << find(it) << '\n';
 	return 0;
 }

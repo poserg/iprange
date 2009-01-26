@@ -14,7 +14,6 @@ extern int yyparse(void);
 extern int yyerror(const char *);
 
 extern int flag;
-extern char ch[4];
 
 typedef struct _IPAddress {
 	char A;
@@ -27,9 +26,8 @@ extern IPAddress adrs;
 extern char str[4];
 extern void AddAddress ( unsigned& item);
 extern unsigned func (char *ch);
-extern void unfunc (unsigned s, char& ch);
+extern void unfunc (unsigned s, int* ch);
 extern unsigned pow (int x, int k);
-//extern list<string> 
+extern int find (unsigned& item);
 
-//extern void AddAddress (
 #endif
