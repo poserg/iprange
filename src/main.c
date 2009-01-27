@@ -1,28 +1,27 @@
 #include "main.h"
 #include <list>
-list<unsigned> slist;
+list<long> slist;
 
-unsigned pow (int x, int k){
+long pow (int x, int k){
 	int i; 
-	unsigned s;
+	long s;
 	s = 1;
 	for (i=0; i<k; i++) s*=x;
 	return s;
 }
 
-unsigned func (char *ch){
+long func (int *ch){
 	int i,j,k;
-	unsigned s;
+	long s;
 	s = 0;
 	for (i=0; i<4; i++){	
-		k = (*ch>=0)?(*ch):(256+*ch);
+		k = (*ch)++;
 		s += pow(2, 8*(3-i))*k;
-		ch++;
 	}
 	return s;
 }
 
-void unfunc (unsigned s, int *ch)
+void unfunc (long s, int *ch)
 {
 	int i;
 	for (i=0; i<4; i++){
@@ -32,15 +31,15 @@ void unfunc (unsigned s, int *ch)
 	}
 }
 
-void AddAddress (unsigned& item)
+void AddAddress (long& item)
 {
 	slist.push_back(item);
 }
 
-int find (unsigned& item)
+int find (long& item)
 {
 	int i;
-	list<unsigned>::iterator iter;
+	list<long>::iterator iter;
 	iter = slist.begin();
 	while (iter != slist.end())
 		if ( *iter++ == item ) return 1;

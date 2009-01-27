@@ -3,11 +3,11 @@
 //#define YYERROR_VERBOSE
 extern FILE *stderr;
 int i, j, k, m;
-char ch1 [4];
-char ch2 [4];
+int ch1 [4];
+int ch2 [4];
 int arr1 [32];
 int arr2 [32];
-unsigned s1, s2, s;
+long s1, s2, s;
 int p [4];
 %}
 %defines
@@ -16,7 +16,7 @@ int p [4];
 %token <ival> QUIT SPACE DIGIT
 %type <ch> ad
 %union {
-	char ch[4];
+	int ch[4];
 	int ival;
 }
 %%
@@ -43,11 +43,12 @@ state 	: ad
 	}
 	| ad'/'IP 
 	{
-		for (i=0; i<4; i++) ch1[i] = ch2[i] = ($1[i]>=0)?$1[i]:(256+$1[i]);
+		k = $3;
+		if (k>32) yyerror ("Bad range");
+		for (i=0; i<4; i++) ch1[i] = ch2[i] = $1[i];
 		
 		decToBin (ch1, arr1);
 		
-		k = $3;
 		for (i=31; i>=0; i--){
 			if (k-- > 0) {
 				arr2[i] = arr1[i];
@@ -81,11 +82,11 @@ int yyerror (const char *s)
 	return 0;
 }
 
-void decToBin (char *ch, int *arr)
+void decToBin (int *ch, int *arr)
 {
-	int t, i, j;
+	int t, i, j, k;
 	for (i=0; i<4; i++){
-		k = (ch[3-i]>0)?ch[3-i]:(256+ch[3-i]);
+		k = ch[3-i];
 		for (j=0; j<8; j++){
 			t = k / 2;
 			*arr = k-2*t;
@@ -96,7 +97,7 @@ void decToBin (char *ch, int *arr)
 	
 }
 
-void binToDec (int *arr, char *ch)
+void binToDec (int *arr, int *ch)
 {
 	int p, i, j;
 	for (i=0; i<4; i++){
@@ -105,11 +106,11 @@ void binToDec (int *arr, char *ch)
 			p += (*arr) * pow(2, j);
 			arr++;
 		}
-		ch[3-i] = (p<128)?p:(p-255);
+		ch[3-i] = p;
 	}
 }
 
-void Sorted (unsigned& s1, unsigned& s2)
+void Sorted (long& s1, long& s2)
 {	
 	if (s1<=s2){
 		for ( ; s1<=s2; s1++){
