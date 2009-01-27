@@ -3,7 +3,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "y.tab.h"
+#include "parser.h"
 
 using namespace std;
 
@@ -23,10 +23,10 @@ typedef struct _IPAddress {
 	char D;
 } IPAddress;
 
-extern void AddAddress ( unsigned& item);
-extern unsigned func (char *ch);
-extern void unfunc (unsigned s, int* ch);
-extern unsigned pow (int x, int k);
-extern int find (unsigned& item);
+extern void AddAddress ( unsigned& );
+extern unsigned func (char*);
+extern void unfunc (unsigned , int*);
+extern unsigned pow (int, int );
+extern int find (unsigned&);
 
 #endif

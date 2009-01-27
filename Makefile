@@ -1,18 +1,14 @@
 PROGRAM_NAME = prog
-SRC = parser.y source.l main.c
-OBJ = $(addsuffix .o, $(basename $(SRC)))
-CC = g++
-CFLAGS = -MMD
-all : $(PROGRAM_NAME)
-	
-$(PROGRAM_NAME) : $(OBJ)
-	$(CC) $^ -o $@
+DDIR = dbuild
+BINDIR = bin
+SRCDIR = src
+DIR := $(DDIR) $(BINDIR)
+export PROGRAM_NAME := $(addprefix ../$(BINDIR)/, $(PROGRAM_NAME))
+export DDIR := $(addprefix ../, $(DDIR))
+all :
+	mkdir -p $(DIR)
+	$(MAKE) -C $(SRCDIR)
+clean :
+	$(RM) -r $(DIR) 
 
 .PHONY : all clean
-
-.SECONDARY : parser.c source.c
-	
-clean : 
-	$(RM) $(PROGRAM_NAME) $(OBJ) parser.c y.tab.h lex.yy.c source.c a.out *.d parser.t*
-
--include *.d

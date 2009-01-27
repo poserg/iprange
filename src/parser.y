@@ -38,6 +38,7 @@ state 	: ad
 	{
 		s1 = func ($1);
 		s2 = func ($3);
+		Sorted (s1, s2);
 		
 	}
 	| ad'/'IP 
@@ -101,7 +102,7 @@ void binToDec (int *arr, char *ch)
 	for (i=0; i<4; i++){
 		p = 0;
 		for (j=0; j<8; j++){
-			p+=*arr*pow(2, j);
+			p += (*arr) * pow(2, j);
 			arr++;
 		}
 		ch[3-i] = (p<128)?p:(p-255);
