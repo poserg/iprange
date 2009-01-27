@@ -12,7 +12,7 @@ int p [4];
 %}
 %defines
 %start input
-%token <ival> IP 
+%token <ival> IP
 %token <ival> QUIT SPACE DIGIT
 %type <ch> ad
 %union {
@@ -22,14 +22,14 @@ int p [4];
 %%
 input	: /*	*/
 	| input '\n'
-	| input state 
+	| input state
 	| input QUIT
 	{ YYACCEPT; }
 	| input error '\n'
 	;
 
-state 	: ad
-	{ 
+state	: ad
+	{
 		s = func($1);
 		if (find(s)) printf ("yes\n");
 		else printf ("no\n");
@@ -39,36 +39,37 @@ state 	: ad
 		s1 = func ($1);
 		s2 = func ($3);
 		Sorted (s1, s2);
-		
+
 	}
-	| ad'/'IP 
+	| ad'/'IP
 	{
 		k = $3;
 		if (k>32) yyerror ("Bad range");
 		for (i=0; i<4; i++) ch1[i] = ch2[i] = $1[i];
-		
+
 		decToBin (ch1, arr1);
-		
+
 		for (i=31; i>=0; i--){
-			if (k-- > 0) {
+			if (k > 0) {
 				arr2[i] = arr1[i];
 			} else {
 				arr1[i] = 0;
 				arr2[i] = 1;
 			}
+                        k--;
 		}
 		binToDec (arr1, ch1);
 		binToDec (arr2, ch2);
-		
+
 		s1 = func (ch1);
 		s2 = func (ch2);
-		
+
 		Sorted (s1,s2);
 	}
 	;
 
 ad	: IP'.'IP'.'IP'.'IP
-	{ 
+	{
 		$$[0] = $1;
 		$$[1] = $3;
 		$$[2] = $5;
@@ -78,54 +79,54 @@ ad	: IP'.'IP'.'IP'.'IP
 %%
 int yyerror (const char *s)
 {
-	fprintf (stderr, "ERROR: %s\n", s);
-	return 0;
+    fprintf (stderr, "ERROR: %s\n", s);
+    return 0;
 }
 
 void decToBin (int *ch, int *arr)
 {
-	int t, i, j, k;
-	for (i=0; i<4; i++){
-		k = ch[3-i];
-		for (j=0; j<8; j++){
-			t = k / 2;
-			*arr = k-2*t;
-			arr++;
-			k = t;
-		}
-	}
-	
+    int t, i, j, k;
+    for (i=0; i<4; i++){
+        k = ch[3-i];
+        for (j=0; j<8; j++){
+            t = k / 2;
+            *arr = k-2*t;
+            arr++;
+            k = t;
+        }
+    }
+
 }
 
 void binToDec (int *arr, int *ch)
 {
-	int p, i, j;
-	for (i=0; i<4; i++){
-		p = 0;
-		for (j=0; j<8; j++){
-			p += (*arr) * pow(2, j);
-			arr++;
-		}
-		ch[3-i] = p;
-	}
+    int p, i, j;
+    for (i=0; i<4; i++){
+        p = 0;
+        for (j=0; j<8; j++){
+            p += (*arr) * pow(2, j);
+            arr++;
+        }
+        ch[3-i] = p;
+    }
 }
 
 void Sorted (long& s1, long& s2)
-{	
-	if (s1<=s2){
-		for ( ; s1<=s2; s1++){
-			if (!find(s1))
-				AddAddress (s1);
-			else {
-				printf ("IP is exist: ");
-				unfunc (s1, p);
-				for (i=0; i<4; i++){
-					k = p[i];
-					printf ("%d.", k);
-				}
-				printf ("\n");
-			}
-		}
-		printf ("Add\n");
-	} else yyerror ("s1>s2!");
+{
+    if (s1<=s2){
+        for ( ; s1<=s2; s1++){
+            if (!find(s1))
+                AddAddress (s1);
+            else {
+                printf ("IP is exist: ");
+                unfunc (s1, p);
+                for (i=0; i<4; i++){
+                    k = p[i];
+                    printf ("%d.", k);
+                }
+                printf ("\n");
+            }
+        }
+        printf ("Add\n");
+    } else yyerror ("s1>s2!");
 }

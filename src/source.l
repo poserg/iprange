@@ -9,7 +9,7 @@ CLASSIP	{SPACE}*({OCTET}{DOT}){3,3}{OCTET}{SPACE}*
 BINIP	{SPACE}*({BIN}{DOT}){3,3}{BIN}{SPACE}*
 SPACE	[' '\t]
 DOT	\.
-QUIT	^{SPACE}*[Qq][Uu][Ii][Tt]$
+QUIT	^{SPACE}*[Qq][Uu][Ii][Tt]{SPACE}*$
 RESERV	[-\n\:\.\/]
 
 %%

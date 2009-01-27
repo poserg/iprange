@@ -16,13 +16,6 @@ extern void Sorted (long&, long&);
 
 extern int flag;
 
-typedef struct _IPAddress {
-	char A;
-	char B;
-	char C;
-	char D;
-} IPAddress;
-
 extern void AddAddress ( long& );
 extern long func (int*);
 extern void unfunc (long , int*);
