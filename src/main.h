@@ -14,12 +14,16 @@ extern void decToBin (int*, int*);
 extern void binToDec (int*, int*);
 extern void Sorted (long&, long&);
 
-extern int flag;
-
-extern void AddAddress ( long& );
+extern void AddAddress ( long&, long&, int& );
 extern long func (int*);
 extern void unfunc (long , int*);
 extern long pow (int, int );
 extern int find (long&);
+
+typedef struct _IPRange {
+    long first;
+    long last;
+    int line;
+} IPRange;
 
 #endif

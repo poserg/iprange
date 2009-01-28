@@ -1,6 +1,6 @@
 #include "main.h"
 #include <list>
-list<long> slist;
+list<IPRange> slist;
 
 long pow (int x, int k){
     int i;
@@ -32,23 +32,36 @@ void unfunc (long s, int *ch)
     }
 }
 
-void AddAddress (long& item)
+void AddAddress (long& s1, long& s2, int& line)
 {
-    slist.push_back(item);
+    IPRange ipr;
+    ipr.first = s1;
+    ipr.last = s2;
+    ipr.line = line;
+    printf ("%d\t%d\t%d\n", ipr.first, ipr.last, ipr.line);
+    slist.push_back(ipr);
 }
 
 int find (long& item)
 {
     int i;
-    list<long>::iterator iter;
+    list<IPRange>::iterator iter;
     iter = slist.begin();
-    while (iter != slist.end())
-        if ( *iter++ == item ) return 1;
+    while (i < slist.size())
+        //if ( *iter++ == item ) return 1;
     return 0;
 }
 
 int main(void)
 {
+    IPRange k;
+    list<IPRange>::iterator iter;
+    iter = slist.begin();
+
     yyparse();
+
+    printf ("s1 = %d; s2 = %d; line = %d\n", iter->first, iter->last, iter->line);
+    k = *iter++;
+    printf ("%d\n", k.first);
     return 0;
 }

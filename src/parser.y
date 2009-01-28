@@ -114,7 +114,7 @@ void binToDec (int *arr, int *ch)
 void Sorted (long& s1, long& s2)
 {
     if (s1<=s2){
-        for ( ; s1<=s2; s1++){
+        /*for ( ; s1<=s2; s1++){
             if (!find(s1))
                 AddAddress (s1);
             else {
@@ -126,7 +126,8 @@ void Sorted (long& s1, long& s2)
                 }
                 printf ("\n");
             }
-        }
+            }*/
+        AddAddress (s1, s2, k);
         printf ("Add\n");
     } else yyerror ("s1>s2!");
 }
