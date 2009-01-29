@@ -1,6 +1,5 @@
 %{
 #include "main.h"
-
 //#define YYERROR_VERBOSE
 extern FILE *stderr;
 int i, j, k, m;
@@ -27,8 +26,8 @@ input	: /*	*/
 	| input state
 	| input QUIT
 	{ YYACCEPT; }
-	| input error '\n'
-	;
+	| input error
+        ;
 
 state	: ad
         {
@@ -124,6 +123,8 @@ void Sorted (unsigned& s1, unsigned& s2)
             AddAddress (s1, s2, k);
             printf ("\tAdd %d line\n", line_count);
             line_count++;
-        } else printf ("\tConflict lines: %d, %d\n", k1, k2);
+        } else {
+            printf ("\tConflict lines: %d, %d\n", k1, k2);
+        }
     } else yyerror ("s1>s2!");
 }

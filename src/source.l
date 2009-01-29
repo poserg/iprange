@@ -11,6 +11,7 @@ SPACE	[' '\t]
 DOT	\.
 QUIT	^{SPACE}*[Qq][Uu][Ii][Tt]{SPACE}*$
 RESERV	[-\n\:\.\/]
+LETTER  [A-z]+
 
 %%
 {OCTET} {
@@ -33,8 +34,12 @@ RESERV	[-\n\:\.\/]
 	yyerror ("More dot");
 }
 
+{LETTER} {
+         yyerror ("syntax error");
+}
+
 .|\n {
-	yyerror ("Syntax error!");
+	//yyerror ("Syntax error!");
 }
 %%
 int yywrap ()

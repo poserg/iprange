@@ -12,17 +12,19 @@ extern int yyparse(void);
 extern int yyerror(const char *);
 extern void decToBin (int*, int*);
 extern void binToDec (int*, int*);
-extern void Sorted (long&, long&);
+extern void Sorted (unsigned&, unsigned&);
 
-extern void AddAddress ( long&, long&, int& );
-extern long func (int*);
-extern void unfunc (long , int*);
-extern long pow (int, int );
-extern int find (long&);
+extern int line_count;
+extern void AddAddress ( unsigned&, unsigned&, int& );
+extern unsigned func (int*);
+extern void unfunc (unsigned , int*);
+extern unsigned pow (int, int );
+extern int find (unsigned&);
+extern int start (void);
 
 typedef struct _IPRange {
-    long first;
-    long last;
+    unsigned first;
+    unsigned last;
     int line;
 } IPRange;
 

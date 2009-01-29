@@ -61,11 +61,6 @@ int main(void)
 
     yyparse();
 
-    /*iter = slist.begin();
-    while (iter != slist.end()){
-       printf ("s1 = %u; s2 = %u; line = %d\n", iter->first, iter->last, iter->line);
-       iter++;
-       }*/
     return 0;
 }
 
