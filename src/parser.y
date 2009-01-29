@@ -1,5 +1,6 @@
 %{
 #include "main.h"
+
 //#define YYERROR_VERBOSE
 extern FILE *stderr;
 int i, j, k, m;
@@ -7,7 +8,7 @@ int ch1 [4];
 int ch2 [4];
 int arr1 [32];
 int arr2 [32];
-long s1, s2, s;
+unsigned s1, s2, s;
 int p [4];
 %}
 %defines
@@ -22,6 +23,7 @@ int p [4];
 %%
 input	: /*	*/
 	| input '\n'
+        { start(); }
 	| input state
 	| input QUIT
 	{ YYACCEPT; }
@@ -29,10 +31,11 @@ input	: /*	*/
 	;
 
 state	: ad
-	{
-		s = func($1);
-		if (find(s)) printf ("yes\n");
-		else printf ("no\n");
+        {
+            s = func($1);
+                m = find(s);
+		if ( m ) printf ("\tyes on %d line\n", m);
+		else printf ("\tno\n");
 	}
 	| ad'-'ad
 	{
@@ -79,7 +82,7 @@ ad	: IP'.'IP'.'IP'.'IP
 %%
 int yyerror (const char *s)
 {
-    fprintf (stderr, "ERROR: %s\n", s);
+    fprintf (stderr, "\tERROR: %s\n", s);
     return 0;
 }
 
@@ -95,7 +98,6 @@ void decToBin (int *ch, int *arr)
             k = t;
         }
     }
-
 }
 
 void binToDec (int *arr, int *ch)
@@ -111,23 +113,17 @@ void binToDec (int *arr, int *ch)
     }
 }
 
-void Sorted (long& s1, long& s2)
+void Sorted (unsigned& s1, unsigned& s2)
 {
-    if (s1<=s2){
-        /*for ( ; s1<=s2; s1++){
-            if (!find(s1))
-                AddAddress (s1);
-            else {
-                printf ("IP is exist: ");
-                unfunc (s1, p);
-                for (i=0; i<4; i++){
-                    k = p[i];
-                    printf ("%d.", k);
-                }
-                printf ("\n");
-            }
-            }*/
-        AddAddress (s1, s2, k);
-        printf ("Add\n");
+    double t = s1/s2;
+    int k1, k2;
+    if (s1 < s2){
+        k1 = find (s1);
+        k2 = find (s2);
+        if ( ! k1 && ! k2 ){
+            AddAddress (s1, s2, k);
+            printf ("\tAdd %d line\n", line_count);
+            line_count++;
+        } else printf ("\tConflict lines: %d, %d\n", k1, k2);
     } else yyerror ("s1>s2!");
 }
