@@ -1,28 +1,27 @@
 #include "main.h"
 #include <list>
 list<IPRange> slist;
+int line_count = 1;
 
-long pow (int x, int k){
+unsigned pow (int x, int k){
     int i;
-    long s;
+    unsigned s;
     s = 1;
     for (i=0; i<k; i++) s*=x;
     return s;
 }
 
-long func (int *ch){
-    int i,j,k;
-    long s;
-    s = 0;
+unsigned func (int *ch){
+    int i;
+    unsigned s = 0;
     for (i=0; i<4; i++){
-        k = *ch;
-        s += pow(2, 8*(3-i))*k;
+        s += *ch * pow(2, 8*(3-i));
         ch++;
     }
     return s;
 }
 
-void unfunc (long s, int *ch)
+void unfunc (unsigned s, int *ch)
 {
     int i;
     for (i=0; i<4; i++){
@@ -32,23 +31,24 @@ void unfunc (long s, int *ch)
     }
 }
 
-void AddAddress (long& s1, long& s2, int& line)
+void AddAddress (unsigned& s1, unsigned& s2, int& line)
 {
     IPRange ipr;
     ipr.first = s1;
     ipr.last = s2;
-    ipr.line = line;
-    printf ("%d\t%d\t%d\n", ipr.first, ipr.last, ipr.line);
+    ipr.line = line_count;
     slist.push_back(ipr);
 }
 
-int find (long& item)
+int find (unsigned& item)
 {
     int i;
     list<IPRange>::iterator iter;
     iter = slist.begin();
-    while (i < slist.size())
-        //if ( *iter++ == item ) return 1;
+    while ( iter != slist.end() ){
+        if (item >= iter->first && item <= iter->last) return iter->line;
+        iter++;
+    }
     return 0;
 }
 
@@ -56,12 +56,21 @@ int main(void)
 {
     IPRange k;
     list<IPRange>::iterator iter;
-    iter = slist.begin();
+
+    start();
 
     yyparse();
 
-    printf ("s1 = %d; s2 = %d; line = %d\n", iter->first, iter->last, iter->line);
-    k = *iter++;
-    printf ("%d\n", k.first);
+    /*iter = slist.begin();
+    while (iter != slist.end()){
+       printf ("s1 = %u; s2 = %u; line = %d\n", iter->first, iter->last, iter->line);
+       iter++;
+       }*/
+    return 0;
+}
+
+int start()
+{
+    printf ("line %d: ", line_count);
     return 0;
 }
