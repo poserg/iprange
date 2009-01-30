@@ -2,6 +2,7 @@
 #include <list>
 list<IPRange> slist;
 int line_count = 1;
+FILE *old_stdin = stdin;
 
 unsigned pow (int x, int k){
     int i;
@@ -52,11 +53,17 @@ int find (unsigned& item)
     return 0;
 }
 
-int main(void)
+int main (int argc, char* argv[])
 {
     IPRange k;
     list<IPRange>::iterator iter;
 
+    if ( argv[1] ){
+        if ( (stdin = fopen (argv[1], "r")) == NULL){
+            printf ("Can't open file %s\n", argv[1]);
+            stdin = old_stdin;
+        }
+    }
     start();
 
     yyparse();
