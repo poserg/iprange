@@ -1,6 +1,7 @@
 %{
 #include "main.h"
 int flag = 0;
+int j;
 %}
 DIGIT	[0-9]
 OCTET	{DIGIT}{1,3}
@@ -16,14 +17,16 @@ LETTER  [A-z]+
 %%
 {OCTET} {
 	yylval.ival = atoi (yytext);
-	if (yylval.ival > 255) yyerror ("ERROR!!!!");
+	if (yylval.ival > 255) yyerror ("Octet wasn't bigger 255");
 	return IP;
-}
+}      
 
-^{BINIP}$ {
-          yyin = fopen("infile", "r");
-          ECHO;
-}
+{BIN} {
+      for (j=0; j<yyleng; j++){
+          yylval.bval[j] = yytext[j] - '0';
+      }
+      return BINIP;
+}      
 
 {RESERV} {
 	return yytext[0];

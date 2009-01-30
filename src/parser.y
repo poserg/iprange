@@ -1,23 +1,23 @@
 %{
 #include "main.h"
 //#define YYERROR_VERBOSE
-extern FILE *stderr;
-int i, j, k, m;
+int i, k, m;
 int ch1 [4];
 int ch2 [4];
-int arr1 [32];
-int arr2 [32];
-unsigned s1, s2, s;
-int p [4];
+bool arr1 [32];
+bool arr2 [32];
+unsigned s1, s2;
 %}
 %defines
 %start input
 %token <ival> IP
 %token <ival> QUIT SPACE DIGIT
-%type <ch> ad
+%token <bval> BINIP badrs
+%type <ch> adrs
 %union {
-	int ch[4];
-	int ival;
+    int ch[4];
+    int ival;
+    bool bval[8];
 }
 %%
 input	: /*	*/
@@ -29,53 +29,54 @@ input	: /*	*/
 	| input error
         ;
 
-state	: ad
+state	: adrs
         {
-            s = transform($1);
-                m = find(s);
-		if ( m ) printf ("\tyes on %d line\n", m);
-		else printf ("\tno\n");
+            s1 = transform($1);
+            m = find(s1);
+            if ( m ) printf ("\tyes on %d line\n", m);
+            else printf ("\tno\n");
 	}
-	| ad'-'ad
+	| adrs'-'adrs
 	{
-		s1 = transform ($1);
-		s2 = transform ($3);
-		if (Sorted (s1, s2)) YYABORT;
+            s1 = transform ($1);
+            s2 = transform ($3);
+            if (Sorted (s1, s2)) YYABORT;
 
 	}
-	| ad'/'IP
+	| adrs'/'IP
 	{
-		k = $3;
-		if (k>32) yyerror ("Bad range");
-		for (i=0; i<4; i++) ch1[i] = ch2[i] = $1[i];
+            k = $3;
+            if (k>32) yyerror ("Bad range");
+            for (i=0; i<4; i++) ch1[i] = ch2[i] = $1[i];
 
-		decToBin (ch1, arr1);
+            decToBin (ch1, arr1);
 
-		for (i=31; i>=0; i--){
-			if (k > 0) {
-				arr2[i] = arr1[i];
-			} else {
-				arr1[i] = 0;
-				arr2[i] = 1;
-			}
-                        k--;
-		}
-		binToDec (arr1, ch1);
-		binToDec (arr2, ch2);
+            for (i=31; i>=0; i--){
+                if (k > 0) {
+                            arr2[i] = arr1[i];
+                } else {
+                    arr1[i] = 0;
+                    arr2[i] = 1;
+                }
+                k--;
+            }
+            binToDec (arr1, ch1);
+            binToDec (arr2, ch2);
 
-		s1 = transform (ch1);
-		s2 = transform (ch2);
+            s1 = transform (ch1);
+            s2 = transform (ch2);
 
-		if ( Sorted (s1,s2) ) YYABORT;
+            if ( Sorted (s1,s2) ) YYABORT;
 	}
-	;
+        | badrs
+        ;
 
-ad	: IP'.'IP'.'IP'.'IP
+adrs	: IP'.'IP'.'IP'.'IP
 	{
-		$$[0] = $1;
-		$$[1] = $3;
-		$$[2] = $5;
-		$$[3] = $7;
+            $$[0] = $1;
+            $$[1] = $3;
+            $$[2] = $5;
+            $$[3] = $7;
 	}
 	;
 %%
@@ -85,7 +86,7 @@ int yyerror (const char *s)
     return 0;
 }
 
-void decToBin (int *ch, int *arr)
+void decToBin (int *ch, bool *arr)
 {
     int t, i, j, k;
     for (i=0; i<4; i++){
@@ -99,7 +100,7 @@ void decToBin (int *ch, int *arr)
     }
 }
 
-void binToDec (int *arr, int *ch)
+void binToDec (bool *arr, int *ch)
 {
     int p, i, j;
     for (i=0; i<4; i++){
@@ -114,9 +115,8 @@ void binToDec (int *arr, int *ch)
 
 int Sorted (unsigned& s1, unsigned& s2)
 {
-    double t = s1/s2;
     int k1, k2;
-    if (s1 < s2){
+    if (s1 <= s2){
         k1 = find (s1);
         k2 = find (s2);
         if ( ! k1 && ! k2 ){

@@ -22,7 +22,7 @@ unsigned transform (int *ch){
     return s;
 }
 
-void untransform (unsigned s, int *ch)
+void untransform (unsigned& s, int *ch)
 {
     int i;
     for (i=0; i<4; i++){
@@ -57,9 +57,8 @@ int main (int argc, char* argv[])
 {
     IPRange k;
     list<IPRange>::iterator iter;
-
     if ( argv[1] ){
-        if ( (stdin = fopen (argv[1], "r")) == NULL){
+        if ((stdin = fopen (argv[1], "r")) == NULL){
             printf ("Can't open file %s\n", argv[1]);
             stdin = old_stdin;
         }

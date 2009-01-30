@@ -10,8 +10,8 @@ using namespace std;
 extern int yylex(void);
 extern int yyparse(void);
 extern int yyerror(const char *);
-extern void decToBin (int*, int*);
-extern void binToDec (int*, int*);
+extern void decToBin (int*, bool*);
+extern void binToDec (bool*, int*);
 extern int Sorted (unsigned&, unsigned&);
 
 extern int line_count;

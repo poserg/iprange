@@ -1,4 +1,4 @@
-PROGRAM_NAME = prog
+PROGRAM_NAME = iprange
 DDIR = dbuild
 BINDIR = bin
 SRCDIR = src

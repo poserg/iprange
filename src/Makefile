@@ -3,7 +3,7 @@ CFLAGS = -MMD $(addprefix -I, $(DDIR) .)
 SOURCE := parser.y source.l main.c
 OBJ = $(addprefix $(DDIR)/, $(addsuffix .o, $(basename $(notdir $(SOURCE)))))
 ifeq (0, $(MAKELEVEL))
-PROGRAM_NAME := prog
+PROGRAM_NAME := iprange
 DDIR = .
 endif
 
