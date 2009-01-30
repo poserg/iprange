@@ -31,16 +31,16 @@ input	: /*	*/
 
 state	: ad
         {
-            s = func($1);
+            s = transform($1);
                 m = find(s);
 		if ( m ) printf ("\tyes on %d line\n", m);
 		else printf ("\tno\n");
 	}
 	| ad'-'ad
 	{
-		s1 = func ($1);
-		s2 = func ($3);
-		Sorted (s1, s2);
+		s1 = transform ($1);
+		s2 = transform ($3);
+		if (Sorted (s1, s2)) YYABORT;
 
 	}
 	| ad'/'IP
@@ -63,10 +63,10 @@ state	: ad
 		binToDec (arr1, ch1);
 		binToDec (arr2, ch2);
 
-		s1 = func (ch1);
-		s2 = func (ch2);
+		s1 = transform (ch1);
+		s2 = transform (ch2);
 
-		Sorted (s1,s2);
+		if ( Sorted (s1,s2) ) YYABORT;
 	}
 	;
 
@@ -112,7 +112,7 @@ void binToDec (int *arr, int *ch)
     }
 }
 
-void Sorted (unsigned& s1, unsigned& s2)
+int Sorted (unsigned& s1, unsigned& s2)
 {
     double t = s1/s2;
     int k1, k2;
@@ -125,6 +125,8 @@ void Sorted (unsigned& s1, unsigned& s2)
             line_count++;
         } else {
             printf ("\tConflict lines: %d, %d\n", k1, k2);
+            return 1;
         }
     } else yyerror ("s1>s2!");
+    return 0;
 }

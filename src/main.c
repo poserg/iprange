@@ -12,7 +12,7 @@ unsigned pow (int x, int k){
     return s;
 }
 
-unsigned func (int *ch){
+unsigned transform (int *ch){
     int i;
     unsigned s = 0;
     for (i=0; i<4; i++){
@@ -22,7 +22,7 @@ unsigned func (int *ch){
     return s;
 }
 
-void unfunc (unsigned s, int *ch)
+void untransform (unsigned s, int *ch)
 {
     int i;
     for (i=0; i<4; i++){
@@ -65,9 +65,7 @@ int main (int argc, char* argv[])
         }
     }
     start();
-
     yyparse();
-
     return 0;
 }
 

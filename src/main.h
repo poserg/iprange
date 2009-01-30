@@ -12,20 +12,21 @@ extern int yyparse(void);
 extern int yyerror(const char *);
 extern void decToBin (int*, int*);
 extern void binToDec (int*, int*);
-extern void Sorted (unsigned&, unsigned&);
+extern int Sorted (unsigned&, unsigned&);
 
 extern int line_count;
+extern FILE *old_stdin;
 extern void AddAddress ( unsigned&, unsigned&, int& );
-extern unsigned func (int*);
-extern void unfunc (unsigned , int*);
+extern unsigned transform (int*);
+extern void untransform (unsigned , int*);
 extern unsigned pow (int, int );
 extern int find (unsigned&);
 extern int start (void);
 
-typedef struct _IPRange {
+typedef struct IPRange {
     unsigned first;
     unsigned last;
     int line;
-} IPRange;
+};
 
 #endif

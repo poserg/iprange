@@ -1,6 +1,6 @@
 %{
 #include "main.h"
-int flag;
+int flag = 0;
 %}
 DIGIT	[0-9]
 OCTET	{DIGIT}{1,3}
@@ -20,7 +20,10 @@ LETTER  [A-z]+
 	return IP;
 }
 
-^{BINIP}$ ECHO;
+^{BINIP}$ {
+          yyin = fopen("infile", "r");
+          ECHO;
+}
 
 {RESERV} {
 	return yytext[0];
@@ -44,9 +47,9 @@ LETTER  [A-z]+
 %%
 int yywrap ()
 {
-	if (flag) return flag;
-	if (!flag) {
-		flag = 1;
-		return 0;
-	}
+        if (flag == 0){
+                yyrestart(old_stdin);
+                flag = 1;
+                return 0;
+        } else return 1;
 }
