@@ -1,18 +1,20 @@
-typedef struct IPRange {
+typedef struct _IPRange {
     unsigned first;
     unsigned last;
     int line;
-};
+} IPRange;
 
-struct list {
-    struct Data {
-        IPRange ipr;
-        Data* next;
+struct _Data {
+    IPRange ipr;
 
-        Data (IPRange val, Data* n=0) : ipr(val), next(n) {}
-    };
+    Data (IPRange val, Data* n=0) : ipr(val), next(n) {}
+    Data* next = 0;
+} Data;
 
-    Data *head, *cur;
+struct _list {
+
+    Data* head = 0;
+    Data* cur = 0;
 
     list() { head=cur=0; }
     ~list() {
@@ -26,4 +28,4 @@ struct list {
         if (!head) head = cur = new Data (val);
         else cur = cur->next = new Data(val);
     }
-};
+} list;

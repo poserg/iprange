@@ -3,9 +3,8 @@ list slist;
 int line_count = 1;
 FILE *old_stdin = stdin;
 
-unsigned pow (int x, int k){
-    int i;
-    unsigned s;
+int pow (int x, int k){
+    int i, s;
     s = 1;
     for (i=0; i<k; i++) s*=x;
     return s;
@@ -21,22 +20,22 @@ unsigned transform (int *ch){
     return s;
 }
 
-void untransform (unsigned& s, int *ch)
+void untransform (unsigned* s, int *ch)
 {
     int i;
     for (i=0; i<4; i++){
-        *ch = s/pow(2, 8*(3-i));
-        s=s%pow(2, 8*(3-i));
+        *ch = *s/pow(2, 8*(3-i));
+        *s = *s%pow(2, 8*(3-i));
         ch++;
     }
 }
 
-void AddAddress (unsigned& s1, unsigned& s2, int& line)
+void AddAddress (unsigned* s1, unsigned* s2, int* line)
 {
     IPRange ipr;
-    ipr.first = s1;
-    ipr.last = s2;
-    ipr.line = line_count;
+    ipr.first = *s1;
+    ipr.last = *s2;
+    ipr.line = *line_count;
     slist.push_back(ipr);
 }
 
