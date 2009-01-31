@@ -1,5 +1,5 @@
 %{
-#include "main.h"
+#include "y.h"
 //#define YYERROR_VERBOSE
 int i, k, m;
 int ch1 [4];

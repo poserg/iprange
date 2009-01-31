@@ -1,6 +1,5 @@
 #include "main.h"
-#include <list>
-list<IPRange> slist;
+list slist;
 int line_count = 1;
 FILE *old_stdin = stdin;
 
@@ -44,11 +43,10 @@ void AddAddress (unsigned& s1, unsigned& s2, int& line)
 int find (unsigned& item)
 {
     int i;
-    list<IPRange>::iterator iter;
-    iter = slist.begin();
-    while ( iter != slist.end() ){
-        if (item >= iter->first && item <= iter->last) return iter->line;
-        iter++;
+    list::Data* iter = slist.head;
+    while ( iter ){
+        if (item >= iter->ipr.first && item <= iter->ipr.last) return iter->ipr.line;
+        iter = iter->next;
     }
     return 0;
 }
@@ -56,7 +54,6 @@ int find (unsigned& item)
 int main (int argc, char* argv[])
 {
     IPRange k;
-    list<IPRange>::iterator iter;
     if ( argv[1] ){
         if ((stdin = fopen (argv[1], "r")) == NULL){
             printf ("Can't open file %s\n", argv[1]);
