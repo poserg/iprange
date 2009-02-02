@@ -1,20 +1,19 @@
-typedef struct _IPRange {
+struct {
     unsigned first;
     unsigned last;
     int line;
+    //struct IPRange *next;
 } IPRange;
 
-struct _Data {
-    IPRange ipr;
-
-    Data (IPRange val, Data* n=0) : ipr(val), next(n) {}
-    Data* next = 0;
+struct {
+    struct IPRange *ipr;
+    struct Data *next;
+    Data (IPRange val, Data *n=0) : ipr(val), next(n) {}
 } Data;
 
-struct _list {
+struct {
 
-    Data* head = 0;
-    Data* cur = 0;
+    struct Data *head, *cur;
 
     list() { head=cur=0; }
     ~list() {
@@ -23,7 +22,6 @@ struct _list {
             delete ptr;
         }
     }
-
     void push_back (IPRange val) {
         if (!head) head = cur = new Data (val);
         else cur = cur->next = new Data(val);

@@ -106,7 +106,7 @@ void binToDec (bool *arr, int *ch)
     for (i=0; i<4; i++){
         p = 0;
         for (j=0; j<8; j++){
-            p += (*arr) * pow(2, j);
+            p += (*arr) * power(2, j);
             arr++;
         }
         ch[3-i] = p;

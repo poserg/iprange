@@ -1,4 +1,4 @@
-CC = g++
+#CC = g++
 CFLAGS = -MMD $(addprefix -I, $(DDIR) .)
 SOURCE := parser.y source.l main.c
 OBJ = $(addprefix $(DDIR)/, $(addsuffix .o, $(basename $(notdir $(SOURCE)))))
