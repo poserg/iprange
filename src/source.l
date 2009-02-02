@@ -40,8 +40,8 @@ LETTER  [A-z]+
 	yyerror ("More dot");
 }
 
-{LETTER} {
-         yyerror ("syntax error");
+[^{OCTET}{SPACE}{RESERV}] {
+                          //yyerror ("SYNTAX ERROR");
 }
 
 .|\n {
