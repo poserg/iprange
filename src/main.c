@@ -3,10 +3,16 @@
 
 using namespace std;
 
-typedef map <unsigned, char> adrtype;
-adrtype address;
 int line_count = 1;
 FILE *old_stdin = stdin;
+
+struct elem{
+    char flag;
+    int line;
+};
+
+typedef map<unsigned, pair<char, int> > adrtype;
+adrtype address;
 
 int power (int x, int k){
     int i, s;
@@ -27,8 +33,10 @@ unsigned transform (int *ch){
 
 void AddAddress (unsigned *s1, unsigned *s2, int *line)
 {
-    address[*s1] = 'b';
-    address[*s2] = 'e';
+    pair<char, int> p ('b', *line);
+    address[*s1] = p;
+    p = make_pair ('e', *line);
+    address[*s2] =  p;
 }
 
 int find (unsigned& item)
@@ -36,8 +44,8 @@ int find (unsigned& item)
     adrtype::iterator it;
 
     it = address.lower_bound (item);
-    if (it->second =='e' || it->first == item){
-        return 1;
+    if (it->second.first == 'e' || it->first == item){
+        return it->second.second;
     }else{
         return 0;
     }
