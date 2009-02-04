@@ -11,7 +11,7 @@ BINIP	{SPACE}*({BIN}{DOT}){3,3}{BIN}{SPACE}*
 SPACE	[' '\t]
 DOT	\.
 QUIT	^{SPACE}*[Qq][Uu][Ii][Tt]{SPACE}*$
-RESERV	[-\n\:\.\/]
+RESERV	[-\:\.\/]
 LETTER  [A-z]+
 
 %%
@@ -27,6 +27,11 @@ LETTER  [A-z]+
       }
       return BINIP;
 }      
+
+\n {
+   line_count++;
+   return '\n';
+}
 
 {RESERV} {
 	return yytext[0];
@@ -44,9 +49,9 @@ LETTER  [A-z]+
                           //yyerror ("SYNTAX ERROR");
 }
 
-.|\n {
+ /* {
 	//yyerror ("Syntax error!");
-}
+ }*/
 %%
 int yywrap ()
 {

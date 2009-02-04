@@ -7,6 +7,6 @@ extern int Sorted (unsigned&, unsigned&);
 
 extern void AddAddress ( unsigned*, unsigned*, int* );
 extern unsigned transform (int*);
-extern void untransform (unsigned , int*);
 extern unsigned power (int, int );
 extern int find (unsigned&);
+extern void printip (int*);

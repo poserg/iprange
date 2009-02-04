@@ -33,7 +33,9 @@ state	: adrs
         {
             s1 = transform($1);
             m = find(s1);
-            if ( m ) printf ("\tyes on %d line\n", m);
+            printf ("\t");
+            printip ($1);
+            if ( m ) printf (" is exist (%d)\n", m);
             else printf ("\tno\n");
 	}
 	| adrs'-'adrs
@@ -41,7 +43,13 @@ state	: adrs
             s1 = transform ($1);
             s2 = transform ($3);
             if (Sorted (s1, s2)) YYABORT;
-
+            else {
+                printf ("\tadd : ");
+                printip ($1);
+                printf (" - ");
+                printip ($3);
+                printf ("\n");
+            }
 	}
 	| adrs'/'IP
 	{
@@ -67,6 +75,13 @@ state	: adrs
             s2 = transform (ch2);
 
             if ( Sorted (s1,s2) ) YYABORT;
+            else {
+                printf ("\tadd : ");
+                printip (ch1);
+                printf (" - ");
+                printip (ch2);
+                printf ("\n");
+            }
 	}
         | badrs
         ;
@@ -121,12 +136,20 @@ int Sorted (unsigned& s1, unsigned& s2)
         k2 = find (s2);
         if ( ! k1 && ! k2 ){
             AddAddress (&s1, &s2, &line_count);
-            printf ("\tAdd %d line\n", line_count);
-            line_count++;
-        } else {
+        }else {
             printf ("\tConflict lines: %d, %d\n", k1, k2);
             return 1;
         }
     } else yyerror ("s1>s2!");
     return 0;
+}
+
+void printip (int *ch)
+{
+    int i;
+    for (i=0; i<4; i++){
+        printf ("%d", *ch);
+        ch++;
+        if (i != 3) printf (".");
+    }
 }

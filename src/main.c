@@ -51,6 +51,15 @@ int find (unsigned& item)
     }
 }
 
+/*int find (unsigned& item1, unsigned& item2)
+{
+    adrtype::iterator it;
+    it = address.lower_bound (item1);
+    if (it->second.first == 'e' || it->first == item){
+        return it->second.second;
+    }else {
+
+*/
 int main (int argc, char* argv[])
 {
     if ( argv[1] ){
