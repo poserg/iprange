@@ -1,5 +1,10 @@
 #include "main.h"
-list slist;
+#include <map>
+
+using namespace std;
+
+typedef map <unsigned, char> adrtype;
+adrtype address;
 int line_count = 1;
 FILE *old_stdin = stdin;
 
@@ -20,39 +25,26 @@ unsigned transform (int *ch){
     return s;
 }
 
-void untransform (unsigned* s, int *ch)
-{
-    int i;
-    for (i=0; i<4; i++){
-        *ch = *s/power(2, 8*(3-i));
-        *s = *s%power(2, 8*(3-i));
-        ch++;
-    }
-}
-
 void AddAddress (unsigned *s1, unsigned *s2, int *line)
 {
-    IPRange ipr;
-    ipr.first = *s1;
-    ipr.last = *s2;
-    ipr.line = line_count;
-    slist.push_back(ipr);
+    address[*s1] = 'b';
+    address[*s2] = 'e';
 }
 
 int find (unsigned& item)
 {
-    int i;
-    list::Data* iter = slist.head;
-    while ( iter ){
-        if (item >= iter->ipr.first && item <= iter->ipr.last) return iter->ipr.line;
-        iter = iter->next;
+    adrtype::iterator it;
+
+    it = address.lower_bound (item);
+    if (it->second =='e' || it->first == item){
+        return 1;
+    }else{
+        return 0;
     }
-    return 0;
 }
 
 int main (int argc, char* argv[])
 {
-    IPRange k;
     if ( argv[1] ){
         if ((stdin = fopen (argv[1], "r")) == NULL){
             printf ("Can't open file %s\n", argv[1]);

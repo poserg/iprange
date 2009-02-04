@@ -1,12 +1,8 @@
 #ifndef MAIN_H
 #define MAIN_H
 
-#define bool char
-
 #include <stdio.h>
-#include <stdlib.h>
 #include "parser.h"
-#include "list.c"
 
 extern int line_count;
 extern FILE *old_stdin;

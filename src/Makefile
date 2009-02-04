@@ -29,7 +29,7 @@ $(DDIR)/%.c : %.l
 .PHONY : all clean
 
 clean :
-	$(RM) *.d *.o parser.h parser.c source.c $(PROGRAM_NAME) 
+	$(RM) *.d *.o parser.h parser.c source.c $(PROGRAM_NAME) list
 
 -include $(DDIR)/*.d
 

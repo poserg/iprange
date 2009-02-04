@@ -32,7 +32,7 @@ input	: /*	*/
 state	: adrs
         {
             s1 = transform($1);
-            m = find(&s1);
+            m = find(s1);
             if ( m ) printf ("\tyes on %d line\n", m);
             else printf ("\tno\n");
 	}
@@ -40,7 +40,7 @@ state	: adrs
 	{
             s1 = transform ($1);
             s2 = transform ($3);
-            if (Sorted (&s1, &s2)) YYABORT;
+            if (Sorted (s1, s2)) YYABORT;
 
 	}
 	| adrs'/'IP
@@ -66,7 +66,7 @@ state	: adrs
             s1 = transform (ch1);
             s2 = transform (ch2);
 
-            if ( Sorted (&s1, &s2) ) YYABORT;
+            if ( Sorted (s1,s2) ) YYABORT;
 	}
         | badrs
         ;
@@ -102,7 +102,7 @@ void decToBin (int *ch, bool *arr)
 
 void binToDec (bool *arr, int *ch)
 {
-    int i, j, p;
+    int p, i, j;
     for (i=0; i<4; i++){
         p = 0;
         for (j=0; j<8; j++){
@@ -113,14 +113,14 @@ void binToDec (bool *arr, int *ch)
     }
 }
 
-int Sorted (unsigned* s1, unsigned* s2)
+int Sorted (unsigned& s1, unsigned& s2)
 {
     int k1, k2;
     if (s1 <= s2){
         k1 = find (s1);
         k2 = find (s2);
         if ( ! k1 && ! k2 ){
-            AddAddress (s1, s2, &k);
+            AddAddress (&s1, &s2, &line_count);
             printf ("\tAdd %d line\n", line_count);
             line_count++;
         } else {
