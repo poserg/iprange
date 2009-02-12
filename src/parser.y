@@ -1,11 +1,12 @@
 %{
-#include "y.h"
+//#include "y.h"
+#include "main.h"
 //#define YYERROR_VERBOSE
 int i, k, m;
 int ch1 [4];
 int ch2 [4];
-bool arr1 [32];
-bool arr2 [32];
+short arr1 [32];
+short arr2 [32];
 unsigned s1, s2;
 %}
 %defines
@@ -17,7 +18,7 @@ unsigned s1, s2;
 %union {
     int ch[4];
     int ival;
-    bool bval[8];
+    short bval[8];
 }
 %%
 input	: /*	*/
@@ -42,7 +43,7 @@ state	: adrs
 	{
             s1 = transform ($1);
             s2 = transform ($3);
-            if (Sorted (s1, s2)) YYABORT;
+            if (Sorted (&s1, &s2)) YYABORT;
             else {
                 printf ("\tadd : ");
                 printip ($1);
@@ -74,7 +75,7 @@ state	: adrs
             s1 = transform (ch1);
             s2 = transform (ch2);
 
-            if ( Sorted (s1,s2) ) YYABORT;
+            if ( Sorted (&s1,&s2) ) YYABORT;
             else {
                 printf ("\tadd : ");
                 printip (ch1);
@@ -101,7 +102,7 @@ int yyerror (const char *s)
     return 0;
 }
 
-void decToBin (int *ch, bool *arr)
+void decToBin (int *ch, short *arr)
 {
     int t, i, j, k;
     for (i=0; i<4; i++){
@@ -115,7 +116,7 @@ void decToBin (int *ch, bool *arr)
     }
 }
 
-void binToDec (bool *arr, int *ch)
+void binToDec (short *arr, int *ch)
 {
     int p, i, j;
     for (i=0; i<4; i++){
@@ -128,14 +129,14 @@ void binToDec (bool *arr, int *ch)
     }
 }
 
-int Sorted (unsigned& s1, unsigned& s2)
+int Sorted (unsigned *s1, unsigned *s2)
 {
     int k1, k2;
-    if (s1 <= s2){
-        k1 = find (s1);
-        k2 = find (s2);
+    if (*s1 <= *s2){
+        k1 = find (*s1);
+        k2 = find (*s2);
         if ( ! k1 && ! k2 ){
-            AddAddress (&s1, &s2, &line_count);
+            AddAddress (s1, s2, &line_count);
         }else {
             printf ("\tConflict lines: %d, %d\n", k1, k2);
             return 1;

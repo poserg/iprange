@@ -1,4 +1,3 @@
-CC = g++
 CFLAGS = -MMD $(addprefix -I, $(DDIR) .)
 SOURCE := parser.y source.l main.c
 OBJ = $(addprefix $(DDIR)/, $(addsuffix .o, $(basename $(notdir $(SOURCE)))))
@@ -10,7 +9,7 @@ endif
 all : $(PROGRAM_NAME)
 
 $(PROGRAM_NAME) : $(OBJ)
-	$(CC) $^ -o $@
+	cc $^ /usr/local/lib/libredblack.a -o $@
 
 %.o : %.c
 	$(CC) -c $(CFLAGS) -o $@ $<
@@ -22,7 +21,7 @@ $(DDIR)/%.c $(DDIR)/%.h: %.y
 	$(YACC) -o $@ $<
 
 $(DDIR)/%.c : %.l
-	$(LEX) -o $@ $< 
+	$(LEX) -o$@ $<
 
 .SECONDARY : $(OBJ:.o=.c)
 

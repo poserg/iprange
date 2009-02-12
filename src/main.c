@@ -1,18 +1,10 @@
 #include "main.h"
-#include <map>
+#include <redblack.h>
 
-using namespace std;
-
+extern FILE *stdin;
+FILE *old_stdin;
 int line_count = 1;
-FILE *old_stdin = stdin;
-
-struct elem{
-    char flag;
-    int line;
-};
-
-typedef map<unsigned, pair<char, int> > adrtype;
-adrtype address;
+struct rbtree *rb;
 
 int power (int x, int k){
     int i, s;
@@ -33,35 +25,37 @@ unsigned transform (int *ch){
 
 void AddAddress (unsigned *s1, unsigned *s2, int *line)
 {
-    pair<char, int> p ('b', *line);
-    address[*s1] = p;
-    p = make_pair ('e', *line);
-    address[*s2] =  p;
+    unsigned arr[3];
+    unsigned *val;
+    val = malloc (sizeof arr);
+    val[0] = *s1;
+    val[1] = *s2;
+    val[2] = *line;
+    val = rbsearch (val, rb);
 }
 
-int find (unsigned& item)
+int find (unsigned item)
 {
-    adrtype::iterator it;
-
-    it = address.lower_bound (item);
-    if (it->second.first == 'e' || it->first == item){
-        return it->second.second;
-    }else{
-        return 0;
-    }
+    unsigned *ptr;
+    //ptr = rbfind (&item, rb);
+    ptr = rblookup (RB_LULTEQ, &item, rb);
+    if (ptr == NULL || ptr[1] < item) return 0;
+    else return ptr[2];
 }
 
-/*int find (unsigned& item1, unsigned& item2)
+int compare(const void *pa, const void *pb, const void *config)
 {
-    adrtype::iterator it;
-    it = address.lower_bound (item1);
-    if (it->second.first == 'e' || it->first == item){
-        return it->second.second;
-    }else {
+	if(*(int *)pa < *(int *)pb) return -1;
+	if(*(int *)pa > *(int *)pb) return 1;
+	return 0;
+}
 
-*/
 int main (int argc, char* argv[])
 {
+    //extern FILE *stdin;
+    //FILE *old_stdin;
+    rb = rbinit (compare, NULL);
+    old_stdin = stdin;
     if ( argv[1] ){
         if ((stdin = fopen (argv[1], "r")) == NULL){
             printf ("Can't open file %s\n", argv[1]);
@@ -70,6 +64,17 @@ int main (int argc, char* argv[])
     }
     start();
     yyparse();
+    /*
+    unsigned *ptr;
+
+    for (ptr = rblookup (RB_LUFIRST, NULL, rb);
+         ptr != NULL;
+         ptr = rblookup (RB_LUNEXT, ptr, rb))
+    {
+        printf ("%u - %u;\t%d\n", ptr[0], ptr[1], ptr[2]);
+    }
+    */
+
     return 0;
 }
 

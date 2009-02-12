@@ -5,6 +5,7 @@
 #include "parser.h"
 
 extern int line_count;
+extern FILE *stdin;
 extern FILE *old_stdin;
 extern int start (void);
 
