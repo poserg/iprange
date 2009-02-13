@@ -8,7 +8,10 @@ int ch2 [4];
 short arr1 [32];
 short arr2 [32];
 unsigned s1, s2;
+#define YYPARSE_PARAM scanner
+#define YYLEX_PARAM scanner
 %}
+%pure_parser
 %defines
 %start input
 %token <ival> IP

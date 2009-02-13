@@ -1,8 +1,7 @@
 #include "main.h"
 #include <redblack.h>
 
-extern FILE *stdin;
-FILE *old_stdin;
+
 int line_count = 1;
 struct rbtree *rb;
 
@@ -31,15 +30,16 @@ void AddAddress (unsigned *s1, unsigned *s2, int *line)
     val[0] = *s1;
     val[1] = *s2;
     val[2] = *line;
-    val = rbsearch (val, rb);
+    rbsearch (val, rb);
 }
 
 int find (unsigned item)
 {
     unsigned *ptr;
+    printf ("item = %u\n", item);
     //ptr = rbfind (&item, rb);
     ptr = rblookup (RB_LULTEQ, &item, rb);
-    if (ptr == NULL || ptr[1] < item) return 0;
+    if (ptr == NULL || ptr[1] <= item) return 0;
     else return ptr[2];
 }
 
@@ -52,21 +52,21 @@ int compare(const void *pa, const void *pb, const void *config)
 
 int main (int argc, char* argv[])
 {
-    //extern FILE *stdin;
-    //FILE *old_stdin;
+    extern FILE *stdin;
+    FILE *old_stdin;
+    void *v;
     rb = rbinit (compare, NULL);
     old_stdin = stdin;
     if ( argv[1] ){
         if ((stdin = fopen (argv[1], "r")) == NULL){
             printf ("Can't open file %s\n", argv[1]);
-            stdin = old_stdin;
-        }
+        } else yyparse (v);
+        stdin = old_stdin;
     }
     start();
-    yyparse();
+    yyparse (v);
     /*
     unsigned *ptr;
-
     for (ptr = rblookup (RB_LUFIRST, NULL, rb);
          ptr != NULL;
          ptr = rblookup (RB_LUNEXT, ptr, rb))
@@ -74,7 +74,6 @@ int main (int argc, char* argv[])
         printf ("%u - %u;\t%d\n", ptr[0], ptr[1], ptr[2]);
     }
     */
-
     return 0;
 }
 
