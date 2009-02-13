@@ -55,12 +55,28 @@ int main (int argc, char* argv[])
     extern FILE *stdin;
     FILE *old_stdin;
     void *v;
+    /*
+    struct parser_control
+    {
+        char old_stdin;
+        int line;
+    }
+
+    struct parser_control ctrl;
+    ctrl.old_stdin ="n";
+    ctrl.line = line_count;
+    */
+
     rb = rbinit (compare, NULL);
     old_stdin = stdin;
     if ( argv[1] ){
         if ((stdin = fopen (argv[1], "r")) == NULL){
             printf ("Can't open file %s\n", argv[1]);
-        } else yyparse (v);
+        } else {
+            //yyparse ((void *) &ctrl);
+            yyparse (v);
+            printf ("first parser finishing\n");
+        }
         stdin = old_stdin;
     }
     start();
