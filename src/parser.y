@@ -1,6 +1,5 @@
 %{
-//#include "y.h"
-#include "main.h"
+#include "y.h"
 //#define YYERROR_VERBOSE
 int i, k, m;
 int ch1 [4];
@@ -8,11 +7,24 @@ int ch2 [4];
 short arr1 [32];
 short arr2 [32];
 unsigned s1, s2;
-#define YYPARSE_PARAM scanner
-#define YYLEX_PARAM scanner
+void parse (parse_parm *pp)
+{
+    yylex_init (pp->yyscanner);
+    yylex_init (pp, pp->yyscanner);
+
+    yyparse (pp, pp->yyscanner);
+
+    yylex_destroy (pp->yyscanner);
+}
 %}
-%pure_parser
 %defines
+
+%pure_parser
+%parse-param {parse_parm *parm}
+%parse-param {void *scanner}
+%lex-param {yyscan_t *scanner}
+%lex-param {parse_parm *parm}
+
 %start input
 %token <ival> IP
 %token <ival> QUIT SPACE DIGIT
@@ -41,6 +53,7 @@ state	: adrs
             printip ($1);
             if ( m ) printf (" is exist (%d)\n", m);
             else printf ("\tno\n");
+	    //if (parm->val) printf ("yse\n");
 	}
 	| adrs'-'adrs
 	{
@@ -58,7 +71,7 @@ state	: adrs
 	| adrs'/'IP
 	{
             k = $3;
-            if (k>32) yyerror ("Bad range");
+            //if (k>32) yyerror ("Bad range");
             for (i=0; i<4; i++) ch1[i] = ch2[i] = $1[i];
 
             decToBin (ch1, arr1);
@@ -96,14 +109,16 @@ adrs	: IP'.'IP'.'IP'.'IP
             $$[1] = $3;
             $$[2] = $5;
             $$[3] = $7;
+            printf ("0 = %d\n", $1);
 	}
 	;
 %%
-int yyerror (const char *s)
+
+int yyerror (parse_parm pp, const char *s)
 {
     fprintf (stderr, "\tERROR: %s\n", s);
     return 0;
-}
+} 
 
 void decToBin (int *ch, short *arr)
 {
@@ -119,7 +134,7 @@ void decToBin (int *ch, short *arr)
     }
 }
 
-void binToDec (short *arr, int *ch)
+void binToDec (short arr[], int ch[])
 {
     int p, i, j;
     for (i=0; i<4; i++){
@@ -144,7 +159,7 @@ int Sorted (unsigned *s1, unsigned *s2)
             printf ("\tConflict lines: %d, %d\n", k1, k2);
             return 1;
         }
-    } else yyerror ("s1>s2!");
+    } //else yyerror ("s1>s2!");
     return 0;
 }
 

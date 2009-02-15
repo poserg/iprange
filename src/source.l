@@ -1,10 +1,11 @@
 %{
 #include "main.h"
+#define YYPARSE_PARAM parm
+#define YYLEX_PARAM parm
 int flag = 0;
 int j;
- //%option reentrant stack noyywrap
 %}
-%option bison-bridge
+%option reentrant bison-bridge noyywrap
 DIGIT	[0-9]
 OCTET	{DIGIT}{1,3}
 BIN	[01]{8,8}
@@ -20,6 +21,7 @@ LETTER  [A-z]+
 {OCTET} {
 	yylval->ival = atoi (yytext);
 	if (yylval->ival > 255) yyerror ("Octet wasn't bigger 255");
+        //if (parm->val) printf ("sfdsdf\n");
 	return IP;
 }      
 
@@ -55,7 +57,16 @@ LETTER  [A-z]+
 	//yyerror ("Syntax error!");
  }*/
 %%
-int yywrap ()
+/*int yywrap ()
 {
-   return 1;
+        /*
+        if (stdin) printf ("sdfsdfsdfsdf\n");
+        if (flag == 0){
+                yyrestart(old_stdin);
+                flag = 1;
+                return 0;
+        } else return 1;
+        
+        return 1;
 }
+*/
