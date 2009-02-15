@@ -9,9 +9,8 @@ short arr2 [32];
 unsigned s1, s2;
 void parse (parse_parm *pp)
 {
-    yylex_init (pp->yyscanner);
     yylex_init (pp, pp->yyscanner);
-    yyset_extra (pp->old_stdin, pp->yyscanner);
+    yyset_extra (pp, pp->yyscanner);
     yyparse (pp, pp->yyscanner);
     yylex_destroy (pp->yyscanner);
 }
@@ -36,7 +35,7 @@ void parse (parse_parm *pp)
 %%
 input	: /*	*/
 	| input '\n'
-        { start(); }
+        { start(parm->line_count); }
 	| input state
 	| input QUIT
 	{ YYACCEPT; }
@@ -46,7 +45,7 @@ input	: /*	*/
 state	: adrs
         {
             s1 = transform($1);
-            m = find(s1);
+            m = find(s1, parm->rb);
             printf ("\t");
             printip ($1);
             if ( m ) printf (" is exist (%d)\n", m);
@@ -56,7 +55,7 @@ state	: adrs
 	{
             s1 = transform ($1);
             s2 = transform ($3);
-            if (Sorted (&s1, &s2)) YYABORT;
+            if (Sorted (&s1, &s2, parm)) YYABORT;
             else {
                 printf ("\tadd : ");
                 printip ($1);
@@ -68,7 +67,7 @@ state	: adrs
 	| adrs'/'IP
 	{
             k = $3;
-            //if (k>32) yyerror ("Bad range");
+            if (k>32) yyerror ("Bad range");
             for (i=0; i<4; i++) ch1[i] = ch2[i] = $1[i];
 
             decToBin (ch1, arr1);
@@ -88,7 +87,7 @@ state	: adrs
             s1 = transform (ch1);
             s2 = transform (ch2);
 
-            if ( Sorted (&s1,&s2) ) YYABORT;
+            if ( Sorted (&s1,&s2,parm) ) YYABORT;
             else {
                 printf ("\tadd : ");
                 printip (ch1);
@@ -143,19 +142,22 @@ void binToDec (short arr[], int ch[])
     }
 }
 
-int Sorted (unsigned *s1, unsigned *s2)
+int Sorted (unsigned *s1, unsigned *s2, parse_parm *pp)
 {
     int k1, k2;
     if (*s1 <= *s2){
-        k1 = find (*s1);
-        k2 = find (*s2);
+        k1 = find (*s1, pp->rb);
+        k2 = find (*s2, pp->rb);
         if ( ! k1 && ! k2 ){
-            AddAddress (s1, s2, &line_count);
+            AddAddress (s1, s2, pp);
         }else {
             printf ("\tConflict lines: %d, %d\n", k1, k2);
             return 1;
         }
-    } //else yyerror ("s1>s2!");
+    } else {
+        yyerror (*pp, "s1>s2!");
+        return 1;
+    }
     return 0;
 }
 

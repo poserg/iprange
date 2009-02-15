@@ -31,7 +31,6 @@ LETTER  [A-z]+
 }      
 
 \n {
-   line_count++;
    return '\n';
 }
 
@@ -50,15 +49,11 @@ LETTER  [A-z]+
 [^{OCTET}{SPACE}{RESERV}] {
                           //yyerror ("SYNTAX ERROR");
 }
-
- /* {
-	//yyerror ("Syntax error!");
- }*/
 %%
 int yywrap (yyscan_t scanner)
 {
-        if ( parm && ! flag) {
-                yyset_in (parm, scanner);
+        if ( parm->old_stdin && ! flag) {
+                yyset_in (parm->old_stdin, scanner);
                 flag++;
                 return 0;
         } else return 1;

@@ -1,8 +1,4 @@
 #include "main.h"
-#include <redblack.h>
-
-int line_count = 1;
-struct rbtree *rb;
 
 int power (int x, int k){
     int i, s;
@@ -21,24 +17,27 @@ unsigned transform (int *ch){
     return s;
 }
 
-void AddAddress (unsigned *s1, unsigned *s2, int *line)
+void AddAddress (unsigned *s1, unsigned *s2, parse_parm *pp)
 {
     unsigned arr[3];
     unsigned *val;
     val = malloc (sizeof arr);
     val[0] = *s1;
     val[1] = *s2;
-    val[2] = *line;
-    val = (int *)rbsearch (val, rb);
+    val[2] = *(pp->line_count);
+    val = (int *)rbsearch (val, pp->rb);
 }
 
-int find (unsigned item)
+int find (unsigned item, struct rbtree *rb)
 {
     unsigned *ptr;
     //ptr = rbfind (&item, rb);
     ptr = (int *)rblookup (RB_LULTEQ, &item, rb);
     if (ptr == NULL || ptr[1] < item) return 0;
     else return ptr[2];
+    //if (ptr == NULL) printf ("fsdfsdf\n");
+    // else printf ("fsdfsdf   %u\n", ptr[0]);
+    //return 0;
 }
 
 int compare(const void *pa, const void *pb, const void *config)
@@ -50,8 +49,11 @@ int compare(const void *pa, const void *pb, const void *config)
 
 int main (int argc, char* argv[])
 {
+    struct rbtree *rb;
     extern FILE *stdin;
     FILE *old_stdin;
+    int *line_count = malloc (sizeof (int));
+
     rb = rbinit (compare, NULL);
     old_stdin = stdin;
     if ( argv[1] ){
@@ -61,12 +63,17 @@ int main (int argc, char* argv[])
             old_stdin = 0;
         }
     } else old_stdin = 0;
-    start();
-
+    *line_count = 0;
+    start(line_count);
     parse_parm pr;
     pr.old_stdin = old_stdin;
+    pr.line_count = line_count;
+    pr.rb = rb;
+
+    int tmp = 0;
+    AddAddress (&tmp, &tmp, &pr);
+
     parse(&pr);
-    //parse (old_stdin);
 /*
     unsigned *ptr;
 
@@ -81,8 +88,8 @@ int main (int argc, char* argv[])
     return 0;
 }
 
-int start()
+int start(int *line_count)
 {
-    printf ("line %d: ", line_count);
+    printf ("line %d: ", ++(*line_count));
     return 0;
 }
