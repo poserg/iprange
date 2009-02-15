@@ -1,8 +1,6 @@
 #include "main.h"
 #include <redblack.h>
 
-extern FILE *stdin;
-FILE *old_stdin;
 int line_count = 1;
 struct rbtree *rb;
 
@@ -52,21 +50,21 @@ int compare(const void *pa, const void *pb, const void *config)
 
 int main (int argc, char* argv[])
 {
-    //extern FILE *stdin;
-    //FILE *old_stdin;
+    extern FILE *stdin;
+    FILE *old_stdin;
     rb = rbinit (compare, NULL);
     old_stdin = stdin;
     if ( argv[1] ){
         if ((stdin = fopen (argv[1], "r")) == NULL){
             printf ("Can't open file %s\n", argv[1]);
             stdin = old_stdin;
+            old_stdin = 0;
         }
-    }
+    } else old_stdin = 0;
     start();
 
     parse_parm pr;
     pr.old_stdin = old_stdin;
-    pr.val = 100;
     parse(&pr);
     //parse (old_stdin);
 /*

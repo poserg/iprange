@@ -7,16 +7,15 @@
 extern int line_count;
 extern int start (void);
 
-//#define YY_EXTRA_TYPE parse_parm*
+#define YY_EXTRA_TYPE FILE*
 
 //extern int yyparse (void*);
 
 typedef	struct parse_parm_s
-	{	
-    		void *yyscanner;
+	{
+		void *yyscanner;
 		FILE *old_stdin;
-		int val;
 	} parse_parm;
-//extern int yyerror (const char*);
+
 void parse (parse_parm *);
 #endif

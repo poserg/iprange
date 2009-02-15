@@ -11,9 +11,8 @@ void parse (parse_parm *pp)
 {
     yylex_init (pp->yyscanner);
     yylex_init (pp, pp->yyscanner);
-
+    yyset_extra (pp->old_stdin, pp->yyscanner);
     yyparse (pp, pp->yyscanner);
-
     yylex_destroy (pp->yyscanner);
 }
 %}
@@ -23,7 +22,6 @@ void parse (parse_parm *pp)
 %parse-param {parse_parm *parm}
 %parse-param {void *scanner}
 %lex-param {yyscan_t *scanner}
-%lex-param {parse_parm *parm}
 
 %start input
 %token <ival> IP
@@ -53,7 +51,6 @@ state	: adrs
             printip ($1);
             if ( m ) printf (" is exist (%d)\n", m);
             else printf ("\tno\n");
-	    //if (parm->val) printf ("yse\n");
 	}
 	| adrs'-'adrs
 	{
@@ -109,7 +106,6 @@ adrs	: IP'.'IP'.'IP'.'IP
             $$[1] = $3;
             $$[2] = $5;
             $$[3] = $7;
-            printf ("0 = %d\n", $1);
 	}
 	;
 %%
@@ -118,7 +114,7 @@ int yyerror (parse_parm pp, const char *s)
 {
     fprintf (stderr, "\tERROR: %s\n", s);
     return 0;
-} 
+}
 
 void decToBin (int *ch, short *arr)
 {
