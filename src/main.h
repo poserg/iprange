@@ -6,6 +6,8 @@
 #include "parser.h"
 
 extern int start (int*);
+extern void * malloc (unsigned);
+extern void * calloc (unsigned, unsigned);
 
 typedef	struct parse_parm_s
 {

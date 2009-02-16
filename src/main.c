@@ -19,9 +19,9 @@ unsigned transform (int *ch){
 
 void AddAddress (unsigned *s1, unsigned *s2, parse_parm *pp)
 {
-    unsigned arr[3];
     unsigned *val;
-    val = malloc (sizeof arr);
+    val = calloc (3, sizeof (unsigned));
+    if (val == NULL) yyerror (pp, "No memory!\n");
     val[0] = *s1;
     val[1] = *s2;
     val[2] = *(pp->line_count);
@@ -53,6 +53,11 @@ int main (int argc, char* argv[])
     extern FILE *stdin;
     FILE *old_stdin;
     int *line_count = malloc (sizeof (int));
+    if (line_count == NULL) {
+        printf ("No memmory!\n");
+        return 1;
+    }
+    parse_parm pp;
 
     rb = rbinit (compare, NULL);
     old_stdin = stdin;
@@ -63,17 +68,22 @@ int main (int argc, char* argv[])
             old_stdin = 0;
         }
     } else old_stdin = 0;
-    *line_count = 0;
-    start(line_count);
-    parse_parm pr;
-    pr.old_stdin = old_stdin;
-    pr.line_count = line_count;
-    pr.rb = rb;
+
+    pp.old_stdin = old_stdin;
+    pp.line_count = line_count;
+    pp.rb = rb;
 
     int tmp = 0;
-    AddAddress (&tmp, &tmp, &pr);
+    AddAddress (&tmp, &tmp, &pp);
 
-    parse(&pr);
+    *line_count = 0;
+    start(line_count);
+
+    parse(&pp);
+
+    free (line_count);
+
+    return 0;
 /*
     unsigned *ptr;
 
@@ -85,7 +95,6 @@ int main (int argc, char* argv[])
     }
 */
 
-    return 0;
 }
 
 int start(int *line_count)
