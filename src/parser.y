@@ -144,14 +144,15 @@ void binToDec (short arr[], int ch[])
 
 int Sorted (unsigned *s1, unsigned *s2, parse_parm *pp)
 {
-    int k1, k2;
+    int k;
     if (*s1 <= *s2){
-        k1 = find (*s1, pp->rb);
-        k2 = find (*s2, pp->rb);
-        if ( ! k1 && ! k2 ){
+        //k1 = find (*s1, pp->rb);
+        //k2 = find (*s2, pp->rb);
+        k = findconflict (*s1, *s2, pp->rb);
+        if (!k){
             AddAddress (s1, s2, pp);
         }else {
-            printf ("\tConflict lines: %d, %d\n", k1, k2);
+            printf ("\tConflict lines: %d\n", k);
             return 1;
         }
     } else {

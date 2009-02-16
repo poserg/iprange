@@ -31,13 +31,31 @@ void AddAddress (unsigned *s1, unsigned *s2, parse_parm *pp)
 int find (unsigned item, struct rbtree *rb)
 {
     unsigned *ptr;
-    //ptr = rbfind (&item, rb);
     ptr = (int *)rblookup (RB_LULTEQ, &item, rb);
     if (ptr == NULL || ptr[1] < item) return 0;
     else return ptr[2];
-    //if (ptr == NULL) printf ("fsdfsdf\n");
-    // else printf ("fsdfsdf   %u\n", ptr[0]);
-    //return 0;
+}
+
+int findconflict (unsigned item1, unsigned item2, struct rbtree *rb)
+{
+    unsigned *ptr;
+    int val[2];
+
+    val[0] = find (item1, rb);
+    val[1] = find (item2, rb);
+    if ( ! val[0] && ! val[1] ){
+        ptr = (unsigned *)rblookup (RB_LULTEQ, &item2, rb);
+        //if (ptr == NULL || ptr[0] <  item1){
+        if (ptr == NULL) {
+            printf ("NULL\n");
+            return 0;
+        }
+        if (ptr[0] < item1) {
+            printf ("ptr = %u\n", ptr[0]);
+            return 0;
+        }
+        else return *(ptr+2);
+    } else return val[0];
 }
 
 int compare(const void *pa, const void *pb, const void *config)
@@ -52,14 +70,16 @@ int main (int argc, char* argv[])
     struct rbtree *rb;
     extern FILE *stdin;
     FILE *old_stdin;
+    parse_parm pp;
+    int tmp = 0;
     int *line_count = malloc (sizeof (int));
     if (line_count == NULL) {
-        printf ("No memmory!\n");
+        yyerror (pp, "No memmory!");
         return 1;
     }
-    parse_parm pp;
 
     rb = rbinit (compare, NULL);
+
     old_stdin = stdin;
     if ( argv[1] ){
         if ((stdin = fopen (argv[1], "r")) == NULL){
@@ -73,7 +93,6 @@ int main (int argc, char* argv[])
     pp.line_count = line_count;
     pp.rb = rb;
 
-    int tmp = 0;
     AddAddress (&tmp, &tmp, &pp);
 
     *line_count = 0;
@@ -84,17 +103,6 @@ int main (int argc, char* argv[])
     free (line_count);
 
     return 0;
-/*
-    unsigned *ptr;
-
-    for (ptr = rblookup (RB_LUFIRST, NULL, rb);
-         ptr != NULL;
-         ptr = rblookup (RB_LUNEXT, ptr, rb))
-    {
-        printf ("%u - %u;\t%d\n", ptr[0], ptr[1], ptr[2]);
-    }
-*/
-
 }
 
 int start(int *line_count)

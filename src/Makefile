@@ -5,11 +5,14 @@ ifeq (0, $(MAKELEVEL))
 PROGRAM_NAME := iprange
 DDIR = .
 endif
+ifndef complete
+CFLAGS += -O0 -g
+endif
 
 all : $(PROGRAM_NAME)
 
 $(PROGRAM_NAME) : $(OBJ)
-	cc $^ /usr/local/lib/libredblack.a -o $@
+	cc $^ /usr/lib/libredblack.a -o $@
 
 %.o : %.c
 	$(CC) -c $(CFLAGS) -o $@ $<
@@ -25,7 +28,7 @@ $(DDIR)/%.c : %.l
 
 .SECONDARY : $(OBJ:.o=.c)
 
-.PHONY : all clean
+.PHONY : all clean debug
 
 clean :
 	$(RM) *.d *.o parser.h parser.c source.c $(PROGRAM_NAME) list
