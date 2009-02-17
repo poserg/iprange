@@ -1,7 +1,7 @@
 /*
-$Rev::                      $: Revision of last commit
-$Author::                   $: Author of last commit
-$Date::                     $: Date of last commit
+$Rev::                         $: Revision of last commit
+$Author::                      $: Author of last commit
+$Date::                        $: Date of last commit
 */
 
 #include "main.h"
