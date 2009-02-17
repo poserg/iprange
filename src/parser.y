@@ -48,7 +48,7 @@ state	: adrs
             m = find(s1, parm->rb);
             printf ("\t");
             printip ($1);
-            if ( m ) printf (" is exist (%d)\n", m);
+            if ( m ) printf ("\tis exist (%d)\n", m);
             else printf ("\tno\n");
 	}
 	| adrs'-'adrs

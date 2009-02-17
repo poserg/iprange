@@ -1,3 +1,8 @@
+/*
+$Rev::               $: Revision of last commit
+$Author::            $: Author of last commit
+$Date::              $: Date of last commit
+*/
 #include "main.h"
 
 int power (int x, int k){
@@ -31,7 +36,7 @@ void AddAddress (unsigned *s1, unsigned *s2, parse_parm *pp)
 int find (unsigned item, struct rbtree *rb)
 {
     unsigned *ptr;
-    ptr = (int *)rblookup (RB_LULTEQ, &item, rb);
+    ptr = (int *)rblookup (RB_LULESS , &item, rb);
     if (ptr == NULL || ptr[1] < item) return 0;
     else return ptr[2];
 }
@@ -44,16 +49,9 @@ int findconflict (unsigned item1, unsigned item2, struct rbtree *rb)
     val[0] = find (item1, rb);
     val[1] = find (item2, rb);
     if ( ! val[0] && ! val[1] ){
-        ptr = (unsigned *)rblookup (RB_LULTEQ, &item2, rb);
+        ptr = (unsigned *)rblookup (RB_LULESS, &item2, rb);
         //if (ptr == NULL || ptr[0] <  item1){
-        if (ptr == NULL) {
-            printf ("NULL\n");
-            return 0;
-        }
-        if (ptr[0] < item1) {
-            printf ("ptr = %u\n", ptr[0]);
-            return 0;
-        }
+        if (ptr == NULL || ptr[0] < item1) return 0;
         else return *(ptr+2);
     } else return val[0];
 }
@@ -101,6 +99,7 @@ int main (int argc, char* argv[])
     parse(&pp);
 
     free (line_count);
+    rbdestroy (rb);
 
     return 0;
 }
