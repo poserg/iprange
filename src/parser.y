@@ -67,7 +67,7 @@ state	: adrs
 	| adrs'/'IP
 	{
             k = $3;
-            if (k>32) yyerror ("Bad range");
+            if (k>32) yyerror (*parm, "Bad range");
             for (i=0; i<4; i++) ch1[i] = ch2[i] = $1[i];
 
             decToBin (ch1, arr1);

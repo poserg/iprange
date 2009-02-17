@@ -1,7 +1,7 @@
 /*
-$Rev::                         $: Revision of last commit
-$Author::                      $: Author of last commit
-$Date::                        $: Date of last commit
+$Rev::                       $: Revision of last commit
+$Author::                    $: Author of last commit
+$Date::                      $: Date of last commit
 */
 
 #include "main.h"
@@ -37,7 +37,7 @@ void AddAddress (unsigned *s1, unsigned *s2, parse_parm *pp)
 int find (unsigned item, struct rbtree *rb)
 {
     unsigned *ptr;
-    ptr = (int *)rblookup (RB_LULESS , &item, rb);
+    ptr = (unsigned *)rblookup (RB_LULTEQ , &item, rb);
     if (ptr == NULL || ptr[1] < item) return 0;
     else return ptr[2];
 }
@@ -50,7 +50,7 @@ int findconflict (unsigned item1, unsigned item2, struct rbtree *rb)
     val[0] = find (item1, rb);
     val[1] = find (item2, rb);
     if ( ! val[0] && ! val[1] ){
-        ptr = (unsigned *)rblookup (RB_LULESS, &item2, rb);
+        ptr = (unsigned *)rblookup (RB_LULTEQ, &item2, rb);
         //if (ptr == NULL || ptr[0] <  item1){
         if (ptr == NULL || ptr[0] < item1) return 0;
         else return *(ptr+2);
@@ -70,7 +70,7 @@ int main (int argc, char* argv[])
     extern FILE *stdin;
     FILE *old_stdin;
     parse_parm pp;
-    int tmp = 0;
+    unsigned tmp = 0;
     int *line_count = malloc (sizeof (int));
     if (line_count == NULL) {
         yyerror (pp, "No memmory!");
