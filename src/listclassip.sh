@@ -1,6 +1,6 @@
 #!/bin/bash
 
-count=1000
+count=1
 
 let count*=4
 while [ $count -gt 0 ]
@@ -12,7 +12,9 @@ do
     let "db = $count % 4"
     if [ $db -eq 0 ] 
     then
-        echo
+        par=$RANDOM
+        let par%=20
+        echo "/$par"
     else 
         echo -n '.'
     fi

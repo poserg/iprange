@@ -7,12 +7,14 @@ int ch2 [4];
 short arr1 [32];
 short arr2 [32];
 unsigned s1, s2;
-void parse (parse_parm *pp)
+int parse (parse_parm *pp)
 {
+    int par;
     yylex_init (pp, pp->yyscanner);
     yyset_extra (pp, pp->yyscanner);
-    yyparse (pp, pp->yyscanner);
+    par = yyparse (pp, pp->yyscanner);
     yylex_destroy (pp->yyscanner);
+    return par;
 }
 %}
 %defines

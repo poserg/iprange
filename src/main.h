@@ -17,7 +17,7 @@ typedef	struct parse_parm_s
     int *line_count;
 } parse_parm;
 
-void parse (parse_parm *);
+int parse (parse_parm *);
 
 #define YY_EXTRA_TYPE parse_parm*
 #endif

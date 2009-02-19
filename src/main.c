@@ -88,6 +88,8 @@ int main (int argc, char* argv[])
         }
     } else old_stdin = 0;
 
+    //old_stdin = 0; //need for genRightIP.sh
+
     pp.old_stdin = old_stdin;
     pp.line_count = line_count;
     pp.rb = rb;
@@ -97,12 +99,11 @@ int main (int argc, char* argv[])
     *line_count = 0;
     start(line_count);
 
-    parse(&pp);
+    return parse(&pp);
 
     free (line_count);
     rbdestroy (rb);
 
-    return 0;
 }
 
 int start(int *line_count)
