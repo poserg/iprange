@@ -7,6 +7,14 @@ int ch2 [4];
 short arr1 [32];
 short arr2 [32];
 unsigned s1, s2;
+
+int power (int x, int k){
+    int i, s;
+    s = 1;
+    for (i=0; i<k; i++) s*=x;
+    return s;
+}
+
 int parse (parse_parm *pp)
 {
     int par;
@@ -47,7 +55,7 @@ input	: /*	*/
 state	: adrs
         {
             s1 = transform($1);
-            m = find(s1, parm->rb);
+            m = find (s1, parm->rb);
             printf ("\t");
             printip ($1);
             if ( m ) printf ("\tis exist (%d)\n", m);
@@ -148,8 +156,6 @@ int Sorted (unsigned *s1, unsigned *s2, parse_parm *pp)
 {
     int k;
     if (*s1 <= *s2){
-        //k1 = find (*s1, pp->rb);
-        //k2 = find (*s2, pp->rb);
         k = findconflict (*s1, *s2, pp->rb);
         if (!k){
             AddAddress (s1, s2, pp);

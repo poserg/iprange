@@ -13,7 +13,8 @@ do
     if [ $db -eq 0 ] 
     then
         par=$RANDOM
-        let par%=20
+        let par%=28
+	let par+=4
         echo "/$par"
     else 
         echo -n '.'

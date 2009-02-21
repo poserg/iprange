@@ -151,7 +151,7 @@ int Sorted (unsigned *s1, unsigned *s2, parse_parm *pp)
         //k1 = find (*s1, pp->rb);
         //k2 = find (*s2, pp->rb);
         k = findconflict (*s1, *s2, pp->rb);
-        if (!k){
+	if (k == 0){
             AddAddress (s1, s2, pp);
         }else {
             printf ("\tConflict lines: %d\n", k);

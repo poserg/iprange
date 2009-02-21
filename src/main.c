@@ -59,8 +59,8 @@ int findconflict (unsigned item1, unsigned item2, struct rbtree *rb)
 
 int compare(const void *pa, const void *pb, const void *config)
 {
-    if(*(int *)pa < *(int *)pb) return -1;
-    if(*(int *)pa > *(int *)pb) return 1;
+    if(*(unsigned *)pa < *(unsigned *)pb) return -1;
+    if(*(unsigned *)pa > *(unsigned *)pb) return 1;
     return 0;
 }
 

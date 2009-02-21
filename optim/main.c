@@ -6,18 +6,16 @@ $Date::                      $: Date of last commit
 
 #include "main.h"
 
-int power (int x, int k){
-    int i, s;
-    s = 1;
-    for (i=0; i<k; i++) s*=x;
-    return s;
-}
-
 unsigned transform (int *ch){
     int i;
     unsigned s = 0;
+    int pow[4];
+    pow[0] = 16777216;
+    pow[1] = 65536;
+    pow[2] = 256;
+    pow[3] = 1;
     for (i=0; i<4; i++){
-        s += *ch * power(2, 8*(3-i));
+        s += *ch * pow[i];
         ch++;
     }
     return s;
@@ -37,7 +35,7 @@ void AddAddress (unsigned *s1, unsigned *s2, parse_parm *pp)
 int find (unsigned item, struct rbtree *rb)
 {
     unsigned *ptr;
-    ptr = (unsigned *)rblookup (RB_LULTEQ , &item, rb);
+    ptr = (unsigned *)rblookup (RB_LULTEQ, &item, rb);
     if (ptr == NULL || ptr[1] < item) return 0;
     else return ptr[2];
 }
@@ -45,22 +43,19 @@ int find (unsigned item, struct rbtree *rb)
 int findconflict (unsigned item1, unsigned item2, struct rbtree *rb)
 {
     unsigned *ptr;
-    int val[2];
-
-    val[0] = find (item1, rb);
-    val[1] = find (item2, rb);
-    if ( ! val[0] && ! val[1] ){
-        ptr = (unsigned *)rblookup (RB_LULTEQ, &item2, rb);
-        //if (ptr == NULL || ptr[0] <  item1){
-        if (ptr == NULL || ptr[0] < item1) return 0;
+    int k;
+    k = find (item1, rb);
+    if ( !k ) {
+        ptr = (unsigned *)rblookup (RB_LUGTEQ, &item1, rb);
+        if (ptr == NULL || ptr[0] > item2) return 0;
         else return *(ptr+2);
-    } else return val[0];
+    }else return k;
 }
 
 int compare(const void *pa, const void *pb, const void *config)
 {
-    if(*(int *)pa < *(int *)pb) return -1;
-    if(*(int *)pa > *(int *)pb) return 1;
+    if(*(unsigned *)pa < *(unsigned *)pb) return -1;
+    if(*(unsigned *)pa > *(unsigned *)pb) return 1;
     return 0;
 }
 
@@ -71,6 +66,7 @@ int main (int argc, char* argv[])
     FILE *old_stdin;
     parse_parm pp;
     unsigned tmp = 0;
+    unsigned *ptr;
     int *line_count = malloc (sizeof (int));
     if (line_count == NULL) {
         yyerror (pp, "No memmory!");
@@ -99,11 +95,19 @@ int main (int argc, char* argv[])
     *line_count = 0;
     start(line_count);
 
-    return parse(&pp);
+    tmp = parse(&pp);
 
+    /*for (ptr = (unsigned *)rblookup(RB_LUFIRST, NULL, rb);
+         ptr != NULL;
+         ptr = (unsigned *)rblookup (RB_LUNEXT, ptr, rb))
+    {
+        printf ("%u\t%u\t%d\n", ptr[0], ptr[1], ptr[2]);
+    }
+    */
     free (line_count);
     rbdestroy (rb);
 
+    return tmp;
 }
 
 int start(int *line_count)

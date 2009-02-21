@@ -1,6 +1,6 @@
 #!/bin/bash
 
-count=100
+count=490
 
 n=0
 
