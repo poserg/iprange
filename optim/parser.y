@@ -8,13 +8,6 @@ short arr1 [32];
 short arr2 [32];
 unsigned s1, s2;
 
-int power (int x, int k){
-    int i, s;
-    s = 1;
-    for (i=0; i<k; i++) s*=x;
-    return s;
-}
-
 int parse (parse_parm *pp)
 {
     int par;
@@ -141,15 +134,58 @@ void decToBin (int *ch, short *arr)
 
 void binToDec (short arr[], int ch[])
 {
-    int p, i, j;
+    int p, i, j, pow;
+    pow = 1;
     for (i=0; i<4; i++){
         p = 0;
         for (j=0; j<8; j++){
-            p += (*arr) * power(2, j);
+            p += (*arr) * (pow << j);
             arr++;
         }
         ch[3-i] = p;
     }
+}
+
+unsigned transform (int *ch){
+    int i;
+    unsigned s = 0;
+    int pow = 1;
+    for (i=0; i<4; i++){
+        s += *ch * ( pow << ((3-i)*8) );
+        ch++;
+    }
+    return s;
+}
+
+void AddAddress (unsigned *s1, unsigned *s2, parse_parm *pp)
+{
+    unsigned *val;
+    val = calloc (3, sizeof (unsigned));
+    if (val == NULL) yyerror (*pp, "No memory!");
+    val[0] = *s1;
+    val[1] = *s2;
+    val[2] = *(pp->line_count);
+    val = (int *)rbsearch (val, pp->rb);
+}
+
+int find (unsigned item, struct rbtree *rb)
+{
+    unsigned *ptr;
+    ptr = (unsigned *)rblookup (RB_LULTEQ, &item, rb);
+    if (ptr == NULL || ptr[1] < item) return 0;
+    else return ptr[2];
+}
+
+int findconflict (unsigned item1, unsigned item2, struct rbtree *rb)
+{
+    unsigned *ptr;
+    int k;
+    k = find (item1, rb);
+    if ( !k ) {
+        ptr = (unsigned *)rblookup (RB_LUGTEQ, &item1, rb);
+        if (ptr == NULL || ptr[0] > item2) return 0;
+        else return *(ptr+2);
+    }else return k;
 }
 
 int Sorted (unsigned *s1, unsigned *s2, parse_parm *pp)
