@@ -6,7 +6,7 @@ PROGRAM_NAME := iprange
 DDIR = .
 endif
 ifndef complete
-CFLAGS += -g -pg
+CFLAGS += -g -fprofile-arcs -ftest-coverage 
 endif
 
 all : $(PROGRAM_NAME)
@@ -28,7 +28,7 @@ $(DDIR)/%.c : %.l
 
 .SECONDARY : $(OBJ:.o=.c)
 
-.PHONY : all clean debug
+.PHONY : all clean
 
 clean :
 	$(RM) *.d *.o parser.h parser.c source.c $(PROGRAM_NAME) list gmon.out

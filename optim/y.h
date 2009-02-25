@@ -1,5 +1,6 @@
 #include "main.h"
 
+extern FILE *stderr;
 extern void decToBin (int*, short*);
 extern void binToDec (short*, int*);
 

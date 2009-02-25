@@ -6,6 +6,48 @@ $Date::                      $: Date of last commit
 
 #include "main.h"
 
+unsigned transform (int *ch){
+    int i;
+    unsigned s = 0;
+    int pow = 1;
+    for (i=0; i<4; i++){
+        s += *ch * ( pow << ((3-i)*8) );
+        ch++;
+    }
+    return s;
+}
+
+void AddAddress (unsigned *s1, unsigned *s2, parse_parm *pp)
+{
+    unsigned *val;
+    val = calloc (3, sizeof (unsigned));
+    if (val == NULL) yyerror (*pp, "No memory!");
+    val[0] = *s1;
+    val[1] = *s2;
+    val[2] = *(pp->line_count);
+    val = (unsigned *)rbsearch (val, pp->rb);
+    free (val);
+}
+
+int find (unsigned item, struct rbtree *rb)
+{
+    unsigned *ptr;
+    ptr = (unsigned *)rblookup (RB_LULTEQ, &item, rb);
+    if (ptr == NULL || ptr[1] < item) return 0;
+    else return ptr[2];
+}
+
+int findconflict (unsigned item1, unsigned item2, struct rbtree *rb)
+{
+    unsigned *ptr;
+    ptr = (unsigned *)rblookup (RB_LULTEQ, &item1, rb);
+    if (ptr == NULL || ptr[1] < item1){
+        ptr = (unsigned *)rblookup (RB_LUNEXT, ptr, rb);
+        if (ptr == NULL || ptr[0] > item2) return 0;
+        else return ptr[2];
+    } else return ptr[2];
+}
+
 int compare(const void *pa, const void *pb, const void *config)
 {
     if(*(unsigned *)pa < *(unsigned *)pb) return -1;
@@ -20,7 +62,6 @@ int main (int argc, char* argv[])
     FILE *old_stdin;
     parse_parm pp;
     unsigned tmp = 0;
-    unsigned *ptr;
     int *line_count = malloc (sizeof (int));
     if (line_count == NULL) {
         yyerror (pp, "No memmory!");
@@ -46,6 +87,8 @@ int main (int argc, char* argv[])
 
     *line_count = 0;
     start(line_count);
+
+    AddAddress (&tmp, &tmp, &pp);
 
     tmp = parse(&pp);
 
