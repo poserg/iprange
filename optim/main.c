@@ -25,8 +25,8 @@ void AddAddress (unsigned *s1, unsigned *s2, parse_parm *pp)
     val[0] = *s1;
     val[1] = *s2;
     val[2] = *(pp->line_count);
-    val = (unsigned *)rbsearch (val, pp->rb);
-    free (val);
+    rbsearch (val, pp->rb);
+    //free (val);
 }
 
 int find (unsigned item, struct rbtree *rb)
@@ -57,6 +57,9 @@ int compare(const void *pa, const void *pb, const void *config)
 
 int main (int argc, char* argv[])
 {
+    unsigned *ptr, *val, *last;
+    int i;
+    int flag = 0;
     struct rbtree *rb;
     extern FILE *stdin;
     FILE *old_stdin;
@@ -76,7 +79,7 @@ int main (int argc, char* argv[])
             printf ("Can't open file %s\n", argv[1]);
             stdin = old_stdin;
             old_stdin = 0;
-        }
+        } else flag = 1;
     } else old_stdin = 0;
 
     //old_stdin = 0; //need for genRightIP.sh
@@ -92,7 +95,31 @@ int main (int argc, char* argv[])
 
     tmp = parse(&pp);
 
+
+    val = ptr = (unsigned *)rblookup (RB_LUFIRST, 0, rb);
+    last = (unsigned *)rblookup (RB_LULAST, 0, rb);
+    while (val != NULL){
+        if (ptr == last ) val = NULL;
+        else {
+            //printf ("start\n");
+            val = (unsigned *)rblookup (RB_LUNEXT, ptr, rb);
+            printf ("end\n");
+        }
+        free (ptr);
+        ptr = NULL;
+        ptr = val;
+    }
+
+    /*
+    for (i = 0; i<6; i++){
+        val = (unsigned *)rblookup (RB_LUNEXT, ptr, rb);
+        free (ptr);
+        ptr = NULL;
+        ptr = val;
+    }
+    */
     free (line_count);
+    if ( flag ) fclose (stdin);
     rbdestroy (rb);
 
     return tmp;
