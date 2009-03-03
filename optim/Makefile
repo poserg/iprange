@@ -6,7 +6,8 @@ PROGRAM_NAME := iprange
 DDIR = .
 endif
 ifndef complete
-CFLAGS += -g -pg #-fprofile-arcs -ftest-coverage  
+#CFLAGS += -g -pg 
+#CFLAGS += -fprofile-arcs -ftest-coverage  
 endif
 
 all : $(PROGRAM_NAME)

@@ -26,7 +26,6 @@ void AddAddress (unsigned *s1, unsigned *s2, parse_parm *pp)
     val[1] = *s2;
     val[2] = *(pp->line_count);
     rbsearch (val, pp->rb);
-    //free (val);
 }
 
 int find (unsigned item, struct rbtree *rb)
@@ -41,8 +40,13 @@ int findconflict (unsigned item1, unsigned item2, struct rbtree *rb)
 {
     unsigned *ptr;
     ptr = (unsigned *)rblookup (RB_LULTEQ, &item1, rb);
+    
     if (ptr == NULL || ptr[1] < item1){
-        ptr = (unsigned *)rblookup (RB_LUNEXT, ptr, rb);
+
+        if (ptr) ptr = (unsigned *)rblookup (RB_LUNEXT, ptr, rb);
+        else ptr = (unsigned *)rblookup (RB_LUFIRST, NULL, rb);
+
+        //ptr = (unsigned *)rblookup (RB_LUNEXT, ptr, rb);
         if (ptr == NULL || ptr[0] > item2) return 0;
         else return ptr[2];
     } else return ptr[2];
@@ -58,7 +62,7 @@ int compare(const void *pa, const void *pb, const void *config)
 int main (int argc, char* argv[])
 {
     unsigned *ptr, *val, *last;
-    int i;
+    int i, ret, var;
     int flag = 0;
     struct rbtree *rb;
     extern FILE *stdin;
@@ -93,36 +97,31 @@ int main (int argc, char* argv[])
 
     AddAddress (&tmp, &tmp, &pp);
 
-    tmp = parse(&pp);
+    ret = parse(&pp);
 
-
-    val = ptr = (unsigned *)rblookup (RB_LUFIRST, 0, rb);
-    last = (unsigned *)rblookup (RB_LULAST, 0, rb);
-    while (val != NULL){
-        if (ptr == last ) val = NULL;
-        else {
-            //printf ("start\n");
-            val = (unsigned *)rblookup (RB_LUNEXT, ptr, rb);
-            printf ("end\n");
-        }
-        free (ptr);
-        ptr = NULL;
-        ptr = val;
+    //destroy
+    i = 0;
+    for (ptr = (unsigned *)rblookup (RB_LUFIRST, NULL, rb);
+	 ptr != NULL;
+	 ptr = (unsigned *)rblookup (RB_LUNEXT, ptr, rb))
+      {i++;}
+    var = i;
+    unsigned *pArr[var];
+    for (i = 0; i<var; i++){
+        if (i == 0) pArr[i] = (unsigned *)rblookup (RB_LUFIRST, NULL, rb);
+        else pArr[i] = (unsigned *)rblookup (RB_LUNEXT, pArr[i-1], rb);
+    }
+    for (i=0; i<var; i++){
+      free (pArr[i]);
     }
 
-    /*
-    for (i = 0; i<6; i++){
-        val = (unsigned *)rblookup (RB_LUNEXT, ptr, rb);
-        free (ptr);
-        ptr = NULL;
-        ptr = val;
-    }
-    */
+    //destroy (pp);
+
     free (line_count);
     if ( flag ) fclose (stdin);
     rbdestroy (rb);
 
-    return tmp;
+    return ret;
 }
 
 int start(int *line_count)
