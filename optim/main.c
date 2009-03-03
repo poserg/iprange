@@ -26,6 +26,7 @@ void AddAddress (unsigned *s1, unsigned *s2, parse_parm *pp)
     val[1] = *s2;
     val[2] = *(pp->line_count);
     rbsearch (val, pp->rb);
+    (*pp->count)++;
 }
 
 int find (unsigned item, struct rbtree *rb)
@@ -39,8 +40,8 @@ int find (unsigned item, struct rbtree *rb)
 int findconflict (unsigned item1, unsigned item2, struct rbtree *rb)
 {
     unsigned *ptr;
+
     ptr = (unsigned *)rblookup (RB_LULTEQ, &item1, rb);
-    
     if (ptr == NULL || ptr[1] < item1){
 
         if (ptr) ptr = (unsigned *)rblookup (RB_LUNEXT, ptr, rb);
@@ -59,67 +60,62 @@ int compare(const void *pa, const void *pb, const void *config)
     return 0;
 }
 
+int destroy (parse_parm pp)
+{
+    int *count = pp.count;
+    struct rbtree *rb = pp.rb;
+    unsigned *pArr[*count];
+    int i;
+
+    if (*count > 0) pArr[0] = (unsigned *)rblookup (RB_LUFIRST, NULL, rb);
+    for (i = 1; i<*count; i++){
+        pArr[i] = (unsigned *)rblookup (RB_LUNEXT, pArr[i-1], rb);
+    }
+    for (i=0; i<*count; i++){
+      free (pArr[i]);
+    }
+    return 0;
+}
+
 int main (int argc, char* argv[])
 {
-    unsigned *ptr, *val, *last;
-    int i, ret, var;
+    //unsigned *ptr, *val, *last;
+    int ret;
     int flag = 0;
     struct rbtree *rb;
     extern FILE *stdin;
-    FILE *old_stdin;
     parse_parm pp;
     unsigned tmp = 0;
-    int *line_count = malloc (sizeof (int));
-    if (line_count == NULL) {
-        yyerror (pp, "No memmory!");
-        return 1;
-    }
 
-    rb = rbinit (compare, NULL);
-
-    old_stdin = stdin;
+    pp.rb = rbinit (compare, NULL);
+    pp.old_stdin = stdin;
     if ( argv[1] ){
         if ((stdin = fopen (argv[1], "r")) == NULL){
             printf ("Can't open file %s\n", argv[1]);
-            stdin = old_stdin;
-            old_stdin = 0;
+            stdin = pp.old_stdin;
+            pp.old_stdin = NULL;
         } else flag = 1;
-    } else old_stdin = 0;
+    } else pp.old_stdin = NULL;
 
     //old_stdin = 0; //need for genRightIP.sh
 
-    pp.old_stdin = old_stdin;
-    pp.line_count = line_count;
-    pp.rb = rb;
+    pp.count = malloc (sizeof (int));
+    pp.line_count = malloc (sizeof (int));
 
-    *line_count = 0;
-    start(line_count);
+    *pp.count = 0;
+    *pp.line_count = 0;
+    start(pp.line_count);
 
     AddAddress (&tmp, &tmp, &pp);
 
     ret = parse(&pp);
 
-    //destroy
-    i = 0;
-    for (ptr = (unsigned *)rblookup (RB_LUFIRST, NULL, rb);
-	 ptr != NULL;
-	 ptr = (unsigned *)rblookup (RB_LUNEXT, ptr, rb))
-      {i++;}
-    var = i;
-    unsigned *pArr[var];
-    for (i = 0; i<var; i++){
-        if (i == 0) pArr[i] = (unsigned *)rblookup (RB_LUFIRST, NULL, rb);
-        else pArr[i] = (unsigned *)rblookup (RB_LUNEXT, pArr[i-1], rb);
-    }
-    for (i=0; i<var; i++){
-      free (pArr[i]);
-    }
-
-    //destroy (pp);
-
-    free (line_count);
+    //destroyed
+    destroy (pp);
+    free (pp.line_count);
+    free (pp.count);
     if ( flag ) fclose (stdin);
-    rbdestroy (rb);
+    rbdestroy (pp.rb);
 
     return ret;
 }

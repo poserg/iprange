@@ -6,8 +6,8 @@
 #include "parser.h"
 
 extern int start (int*);
-extern void * malloc (unsigned);
-extern void * calloc (unsigned, unsigned);
+extern void* malloc (unsigned);
+extern void* calloc (unsigned, unsigned);
 
 typedef	struct parse_parm_s
 {
@@ -15,6 +15,7 @@ typedef	struct parse_parm_s
     FILE *old_stdin;
     struct rbtree *rb;
     int *line_count;
+    int *count;
 } parse_parm;
 
 int parse (parse_parm *);

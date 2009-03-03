@@ -5,9 +5,12 @@ ifeq (0, $(MAKELEVEL))
 PROGRAM_NAME := iprange
 DDIR = .
 endif
-ifndef complete
-#CFLAGS += -g -pg 
-#CFLAGS += -fprofile-arcs -ftest-coverage  
+
+ifdef gdb
+CFLAGS += -g -pg 
+endif
+ifdef gcov
+CFLAGS += -fprofile-arcs -ftest-coverage  
 endif
 
 all : $(PROGRAM_NAME)
