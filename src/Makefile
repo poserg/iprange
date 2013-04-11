@@ -12,7 +12,7 @@ endif
 all : $(PROGRAM_NAME)
 
 $(PROGRAM_NAME) : $(OBJ)
-	cc $^ /usr/lib/libredblack.a $(CFLAGS) -o $@
+	cc $^ /usr/local/lib/libredblack.a $(CFLAGS) -o $@
 
 %.o : %.c
 	$(CC) -c $(CFLAGS) -o $@ $<
